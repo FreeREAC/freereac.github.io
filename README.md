@@ -1,7 +1,8 @@
 # FreeREAC package repository
 
-Signed RPMs for the openmixer console and the REAC transport stack
-(`openmixer`, `reac-pw`, `libreac`), served over `dnf`.
+Signed RPMs for the openmixer console (`openmixer` and its plugin
+collections), served over `dnf`. The REAC transport stack (`reac-pw`,
+`libreac`) joins this repository when those packages publish.
 
 ## Install
 
