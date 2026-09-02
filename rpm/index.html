@@ -7,24 +7,31 @@
 <p>Signed RPMs for the openmixer console and the REAC transport stack.</p>
 <pre><code>sudo dnf config-manager addrepo --from-repofile=https://freereac.github.io/rpm/freereac.repo
 sudo rpm --import https://freereac.github.io/rpm/RPM-GPG-KEY-freereac
-sudo dnf install openmixer-full</code></pre>
+sudo dnf install openmixer</code></pre>
+
+<p><code>openmixer</code> is the console: server, web UI and manual, with the
+<code>mod-host</code> plugin host resolved from this repository in the same transaction.
+<code>openmixer-full</code> adds the REAC stagebox transport and does <strong>not</strong>
+resolve yet — <code>reac-pw</code> and <code>libreac</code> are not published here, so that
+package is listed below but cannot be installed until they are.</p>
 
 <h2>What the repository serves</h2>
 <table>
 <tr><th>package</th><th>version</th><th>arch</th><th>what it is</th></tr>
-<tr><td><code>openmixer-full</code></td><td><code>0.1.0-3.fc44</code></td><td>noarch</td><td>openmixer plus the REAC stagebox transport (one-command rig install)</td></tr>
-<tr><td><code>openmixer</code></td><td><code>0.1.0-3.fc44</code></td><td>x86_64</td><td>Professional software mixing console for PipeWire</td></tr>
-<tr><td><code>openmixer-server</code></td><td><code>0.1.0-3.fc44</code></td><td>x86_64</td><td>openmixer mixer/engine server + CLI tools</td></tr>
-<tr><td><code>openmixer-web-ui</code></td><td><code>0.1.0-3.fc44</code></td><td>noarch</td><td>openmixer web UI (static build + nginx drop-in)</td></tr>
-<tr><td><code>openmixer-plugins-live</code></td><td><code>0.1.0-3.fc44</code></td><td>noarch</td><td>openmixer curated LV2 plugin set (plugins-live)</td></tr>
-<tr><td><code>openmixer-plugins-live-extra</code></td><td><code>0.1.0-3.fc44</code></td><td>noarch</td><td>openmixer curated LV2 plugin set (plugins-live-extra)</td></tr>
-<tr><td><code>openmixer-plugins-studio</code></td><td><code>0.1.0-3.fc44</code></td><td>noarch</td><td>openmixer curated LV2 plugin set (plugins-studio)</td></tr>
-<tr><td><code>openmixer-plugins-studio-extra</code></td><td><code>0.1.0-3.fc44</code></td><td>noarch</td><td>openmixer curated LV2 plugin set (plugins-studio-extra)</td></tr>
+<tr><td><code>openmixer-full</code></td><td><code>0.1.0.2976.ga65e03b1-5.fc44</code></td><td>noarch</td><td>openmixer plus the REAC stagebox transport (one-command rig install)</td></tr>
+<tr><td><code>openmixer</code></td><td><code>0.1.0.2976.ga65e03b1-5.fc44</code></td><td>x86_64</td><td>Professional software mixing console for PipeWire</td></tr>
+<tr><td><code>openmixer-server</code></td><td><code>0.1.0.2976.ga65e03b1-5.fc44</code></td><td>x86_64</td><td>openmixer mixer/engine server + CLI tools</td></tr>
+<tr><td><code>openmixer-web-ui</code></td><td><code>0.1.0.2976.ga65e03b1-5.fc44</code></td><td>noarch</td><td>openmixer web UI (static build + nginx drop-in)</td></tr>
+<tr><td><code>openmixer-plugins-live</code></td><td><code>0.1.0.2976.ga65e03b1-5.fc44</code></td><td>noarch</td><td>openmixer curated LV2 plugin set (plugins-live)</td></tr>
+<tr><td><code>openmixer-plugins-live-extra</code></td><td><code>0.1.0.2976.ga65e03b1-5.fc44</code></td><td>noarch</td><td>openmixer curated LV2 plugin set (plugins-live-extra)</td></tr>
+<tr><td><code>openmixer-plugins-studio</code></td><td><code>0.1.0.2976.ga65e03b1-5.fc44</code></td><td>noarch</td><td>openmixer curated LV2 plugin set (plugins-studio)</td></tr>
+<tr><td><code>openmixer-plugins-studio-extra</code></td><td><code>0.1.0.2976.ga65e03b1-5.fc44</code></td><td>noarch</td><td>openmixer curated LV2 plugin set (plugins-studio-extra)</td></tr>
 <tr><td><code>mod-host</code></td><td><code>0.10.6-1.20251211gitf14a230.fc44</code></td><td>x86_64</td><td>LV2 plugin host controlled over a socket</td></tr>
+<tr><td><code>openmixer-manual</code></td><td><code>0.1.0.2976.ga65e03b1-5.fc44</code></td><td>noarch</td><td>openmixer operator manual, served offline by the console</td></tr>
 </table>
 <p><code>mod-host</code> is the LV2 plugin host <code>openmixer-server</code> spawns for channel
 inserts. No Fedora or RPM Fusion repository carries it, which is why this one does: without it
-<code>dnf install openmixer-full</code> has nothing to resolve the console's plugin host against.
+<code>dnf install openmixer</code> would have nothing to resolve the console's plugin host against.
 Debug information ships alongside as <code>mod-host-debuginfo</code> and
 <code>mod-host-debugsource</code>; sources for every package are in the
 <code>freereac-source</code> repository, disabled by default.</p>
