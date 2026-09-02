@@ -10,19 +10,23 @@ channel inserts, served over `dnf`. The REAC transport stack (`reac-pw`,
 ```bash
 sudo dnf config-manager addrepo --from-repofile=https://freereac.github.io/rpm/freereac.repo
 sudo rpm --import https://freereac.github.io/rpm/RPM-GPG-KEY-freereac
-sudo dnf install openmixer-full
+sudo dnf install openmixer
 ```
 
-`openmixer-full` pulls in the console **and** the REAC transport. For a console
-without REAC hardware, install `openmixer` instead. Either way `mod-host` comes
-along: `openmixer-server` requires it and no Fedora repository carries it, so
-this one does.
+`openmixer` is the console — server, web UI and manual — and `mod-host` comes
+along with it: `openmixer-server` requires the plugin host, and since no Fedora
+repository carries it, this one does.
+
+`openmixer-full` adds the REAC stagebox transport on top. It is published here
+but does **not** resolve yet, because `reac-pw` and `libreac` are not in this
+repository. Install `openmixer` until they are.
 
 ## What is here
 
 | path | contents |
 | --- | --- |
 | `rpm/` | the dnf repository: `fedora/<releasever>/<arch>/` + `repodata/` |
+| | noarch packages live **inside** each arch directory — `dnf`'s `$basearch` never resolves to a sibling `noarch/` tree |
 | `rpm/freereac.repo` | the repo definition (`gpgcheck=1`, `repo_gpgcheck=1`) |
 | `rpm/RPM-GPG-KEY-freereac` | the public signing key |
 
