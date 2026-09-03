@@ -3,7 +3,7 @@
 Signed RPMs for the openmixer console (`openmixer` and its plugin
 collections) and for `mod-host`, the LV2 plugin host the console spawns for
 channel inserts, served over `dnf`. The REAC transport stack (`reac-pw`,
-`libreac`) joins this repository when those packages publish.
+`libreac`) is served here too.
 
 ## Install
 
@@ -17,9 +17,9 @@ sudo dnf install openmixer
 along with it: `openmixer-server` requires the plugin host, and since no Fedora
 repository carries it, this one does.
 
-`openmixer-full` adds the REAC stagebox transport on top. It is published here
-but does **not** resolve yet, because `reac-pw` and `libreac` are not in this
-repository. Install `openmixer` until they are.
+`openmixer-full` adds the REAC stagebox transport on top and resolves here:
+`reac-pw` and `libreac` are in this repository. Install `openmixer` for the
+console alone, or `openmixer-full` for the console plus the REAC transport.
 
 ## What is here
 
