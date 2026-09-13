@@ -13,6 +13,14 @@ sudo rpm --import https://freereac.github.io/rpm/RPM-GPG-KEY-freereac
 sudo dnf install openmixer
 ```
 
+For the REAC transport alone — a Roland stagebox on a Linux machine without the console:
+
+```bash
+sudo dnf install reac-pw
+```
+
+`reac-pw` pulls `libreac` and `libreac-transport` with it (currently 1.0.1).
+
 `openmixer` is the console — server, web UI and manual — and `mod-host` comes
 along with it: `openmixer-server` requires the plugin host, and since no Fedora
 repository carries it, this one does.
