@@ -36,6 +36,13 @@ jobs:
           tools/test-prune-newest-two.sh
       - name: The manifest keeps the newest 2 versions of each package per tree
         run: tools/check-newest-two.sh manifest import/manifest.txt
+      - name: The served public key files hold exactly the channel's one key
+        env:
+          FPR: ${{ vars.FREEREAC_RELEASE_KEY_FPR }}
+        run: |
+          set -euo pipefail
+          tools/test-check-channel-key.sh
+          tools/check-channel-key.sh "$FPR" rpm/RPM-GPG-KEY-freereac deb/freereac.asc
 
   import:
     needs: check

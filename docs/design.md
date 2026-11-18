@@ -7,7 +7,7 @@ home of FreeREAC packages: `libreac`, `reac-pw`, `reac-stageboxes` (and their `-
 | --- | --- |
 | rpm | `rpm/fedora/{44,45}/{x86_64,aarch64}/` as the release matrix publishes, `SRPMS/` beside them |
 | deb | `deb/debian/trixie/<arch>/`, one signed flat index per suite |
-| key | **one** dedicated FreeREAC release key, made for this channel and nothing else (no personal key signs here). Its fingerprint is held in one place, the organisation variable `FREEREAC_RELEASE_KEY_FPR` (set by the owner when the key exists), and the key in the secrets `FREEREAC_PACKAGES_SIGNING_KEY` and `FREEREAC_PACKAGES_SIGNING_PASSPHRASE`; public half `rpm/RPM-GPG-KEY-freereac` and `deb/freereac.asc` |
+| key | **one** dedicated FreeREAC release key, `FreeREAC Release Signing Key <packages@freereac.org>`, fingerprint `97C92ED0E2D65B603A93D4711A72E09298D9C0F6`, made for this channel and nothing else (no personal key signs here). The workflows read the fingerprint from one place only, the organisation variable `FREEREAC_RELEASE_KEY_FPR` (set to that fingerprint); `tools/check-channel-key.sh` checks on every pull request that the served key files hold exactly that one key, and the key in the secrets `FREEREAC_PACKAGES_SIGNING_KEY` and `FREEREAC_PACKAGES_SIGNING_PASSPHRASE`; public half `rpm/RPM-GPG-KEY-freereac` and `deb/freereac.asc` |
 | retention | the newest 2 versions of each package in each tree; a check fails by name above 2 |
 
 The channel shares no key, no release package and no packages with the OpenMixer channel.
