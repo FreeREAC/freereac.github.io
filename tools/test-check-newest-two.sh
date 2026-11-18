@@ -10,4 +10,8 @@ if out=$("$here/check-newest-two.sh" manifest "$w/three" 2>&1); then echo "FAIL:
 grep -q 'reac-pw has 3 versions' <<< "$out" || { echo "FAIL: the refusal does not name the package: $out"; exit 1; }
 if "$here/check-newest-two.sh" manifest "$w/debs" >/dev/null 2>&1; then echo "FAIL: three deb versions accepted"; exit 1; fi
 "$here/check-newest-two.sh" manifest "$here/../import/manifest.txt" >/dev/null
+# a root that holds neither tree is refused by name (find would otherwise walk the whole directory)
+mkdir "$w/empty-root"
+if out=$("$here/check-newest-two.sh" tree "$w/empty-root" 2>&1); then echo "FAIL: a root with neither rpm/fedora nor deb/debian passed"; exit 1; fi
+grep -q 'holds neither rpm/fedora nor deb/debian' <<< "$out" || { echo "FAIL: the refusal does not say why: $out"; exit 1; }
 echo "check-newest-two: ok"

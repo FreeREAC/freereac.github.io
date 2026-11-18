@@ -36,6 +36,11 @@ jobs:
           tools/test-prune-newest-two.sh
       - name: The manifest keeps the newest 2 versions of each package per tree
         run: tools/check-newest-two.sh manifest import/manifest.txt
+      - name: The manifest is served, today, by the OpenMixer channel
+        run: |
+          set -euo pipefail
+          tools/test-manifest.sh
+          python3 tools/manifest.py verify --base https://www.openmixer.org --head import/manifest.txt
       - name: The served public key files hold exactly the channel's one key
         env:
           FPR: ${{ vars.FREEREAC_RELEASE_KEY_FPR }}
@@ -44,8 +49,17 @@ jobs:
           tools/test-check-channel-key.sh
           tools/check-channel-key.sh "$FPR" rpm/RPM-GPG-KEY-freereac deb/freereac.asc
 
+  place-noarch:
+    runs-on: ubuntu-latest
+    container: fedora:44
+    steps:
+      - run: dnf install -y --setopt=install_weak_deps=False rpm-build rpm-sign createrepo_c apt-utils gnupg2 pinentry findutils git curl diffutils tar gzip
+      - uses: actions/checkout@v4
+      - name: A noarch package lands inside every architecture directory and installs from it
+        run: tools/test-place-noarch.sh
+
   import:
-    needs: check
+    needs: [check, place-noarch]
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     container: fedora:44
