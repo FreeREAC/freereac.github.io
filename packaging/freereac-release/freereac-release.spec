@@ -5,7 +5,7 @@
 # Version-Release is the release of debian/changelog too: build.sh refuses a build where the two differ.
 Name:           freereac-release
 Version:        1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        FreeREAC package repository configuration for dnf
 License:        MIT
 URL:            https://freereac.github.io
@@ -30,5 +30,8 @@ install -Dpm 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-
 %{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-freereac
 
 %changelog
+* Wed Nov 18 2026 Pau Aliagas <linuxnow@gmail.com> - 1-2
+- A freereac-noarch repository beside freereac, as openmixer-noarch is: a noarch package of the channel (this package, a released -devel) is published into the channel's noarch tree, which a dnf client did not read. The one key is unchanged.
+
 * Wed Nov 18 2026 Pau Aliagas <linuxnow@gmail.com> - 1-1
 - The FreeREAC repository, ids freereac, and its one key

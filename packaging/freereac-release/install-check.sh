@@ -28,12 +28,15 @@ if command -v dnf >/dev/null; then
     if [ "${SIGNED:-1}" = 1 ]; then
         rpm -K "$file" | tee /dev/stderr | grep -q 'digests signatures OK' || fail "$file does not verify with the shipped key"
     fi
-    dnf -y --setopt=retries=10 --setopt=skip_if_unavailable=False makecache --repo freereac || fail "the freereac repository does not load"
-    dnf repolist | grep -q '^freereac ' || fail "dnf repolist names no freereac"
+    dnf -y --setopt=retries=10 --setopt=skip_if_unavailable=False makecache --repo freereac --repo freereac-noarch || fail "the freereac repositories do not load"
+    dnf repolist | tee "$work/repolist"
+    for id in freereac freereac-noarch; do grep -q "^$id " "$work/repolist" || fail "dnf repolist names no $id"; done
     dnf install -y --setopt=install_weak_deps=False --setopt=retries=10 "$probe"
     from=$(dnf repoquery --installed --qf '%{from_repo}\n' "$probe" | head -1)
-    [ "$from" = freereac ] || fail "$probe came from '$from'"
-    echo "$probe installed from freereac"
+    case "$from" in freereac | freereac-noarch) ;; *) fail "$probe came from '$from'" ;; esac
+    echo "$probe installed from $from"
+    # a noarch package of the channel (freereac-release itself) is reachable too: its repository is the second
+    dnf repoquery --repo freereac-noarch --qf '%{name}-%{evr}.%{arch}' freereac-release | grep -q freereac-release || fail "the noarch repository does not serve freereac-release"
 else
     [ ! -e /etc/apt/sources.list.d/freereac.sources ] || fail "this machine already has a freereac.sources"
     apt-get install -y --no-install-recommends "$file"
