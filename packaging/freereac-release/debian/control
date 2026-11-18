@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Pau Aliagas <linuxnow@gmail.com>
+Source: freereac-release
+Section: admin
+Priority: optional
+Maintainer: Pau Aliagas <linuxnow@gmail.com>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Homepage: https://freereac.github.io
+Rules-Requires-Root: no
+
+Package: freereac-release
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Description: FreeREAC package repository configuration for apt
+ Adds the apt source of the FreeREAC repository, which carries libreac, reac-pw
+ and reac-stageboxes, with the key that signs its index. apt upgrade keeps this
+ configuration current.

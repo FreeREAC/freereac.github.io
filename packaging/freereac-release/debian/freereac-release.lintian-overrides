@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Pau Aliagas <linuxnow@gmail.com>
+# published by the FreeREAC channel, not uploaded to Debian
+freereac-release: initial-upload-closes-no-bugs
+freereac-release: package-installs-apt-sources [etc/apt/sources.list.d/freereac.sources]
