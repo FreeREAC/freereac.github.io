@@ -45,6 +45,12 @@ fetch() {
 place() {
     local dir=$1 root=$2 key=$3 d f p kind
     export GPG_TTY=
+    # a package already in the tree that the channel key does not vouch for (signed by a retired key) leaves: a channel serves what its
+    # one key signed, and a client holding only that key would refuse the file
+    local ks; ks=$(mktemp -d); gpg --batch --armor --export "$key" > "$ks/k.asc"; rpmkeys --root "$ks" --import "$ks/k.asc"
+    while IFS= read -r p; do
+        rpmkeys --root "$ks" --checksig "$p" 2>/dev/null | grep -q 'digests signatures OK' || { echo "dropped $p: not signed by the channel key"; rm -f "$p"; }
+    done < <(find "$root/rpm/fedora" -name '*.rpm' 2>/dev/null)
     for d in $(cd "$dir" && find rpm -type d -path 'rpm/fedora/*/*' | sort); do
         mkdir -p "$root/$d"
         for f in "$dir/$d"/*.rpm; do

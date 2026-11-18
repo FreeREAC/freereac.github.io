@@ -7,7 +7,7 @@ home of FreeREAC packages: `libreac`, `reac-pw`, `reac-stageboxes` (and their `-
 | --- | --- |
 | rpm | `rpm/fedora/{44,45}/{x86_64,aarch64}/` as the release matrix publishes, `SRPMS/` beside them |
 | deb | `deb/debian/trixie/<arch>/`, one signed flat index per suite |
-| key | **one** FreeREAC signing key, fingerprint `618C08DC2CE0B56AB8789DFBA14B3E1E1F69EBF4` (pinned in `import/channel-key.fpr`), held as the repository secrets `RPM_GPG_KEY` and `RPM_GPG_PASSPHRASE`; public half `rpm/RPM-GPG-KEY-freereac` and `deb/freereac.asc` |
+| key | **one** dedicated FreeREAC release key, made for this channel and nothing else (no personal key signs here). Its fingerprint is held in one place, the organisation variable `FREEREAC_RELEASE_KEY_FPR` (set by the owner when the key exists), and the key in the secrets `FREEREAC_PACKAGES_SIGNING_KEY` and `FREEREAC_PACKAGES_SIGNING_PASSPHRASE`; public half `rpm/RPM-GPG-KEY-freereac` and `deb/freereac.asc` |
 | retention | the newest 2 versions of each package in each tree; a check fails by name above 2 |
 
 The channel shares no key, no release package and no packages with the OpenMixer channel.
@@ -30,11 +30,11 @@ with:
   base-url: https://freereac.github.io
   key-file: RPM-GPG-KEY-freereac        # freereac.asc for the deb
   committed-keys: false
-  signing-fingerprint: 618C08DC2CE0B56AB8789DFBA14B3E1E1F69EBF4
+  signing-fingerprint: ${{ vars.FREEREAC_RELEASE_KEY_FPR }}
   repo-file: packaging/freereac-release/freereac.repo
 secrets:
-  OPENMIXER_PACKAGES_SIGNING_KEY: ${{ secrets.RPM_GPG_KEY }}
-  PACKAGES_SIGNING_PASSPHRASE: ${{ secrets.RPM_GPG_PASSPHRASE }}
+  OPENMIXER_PACKAGES_SIGNING_KEY: ${{ secrets.FREEREAC_PACKAGES_SIGNING_KEY }}
+  PACKAGES_SIGNING_PASSPHRASE: ${{ secrets.FREEREAC_PACKAGES_SIGNING_PASSPHRASE }}
   PAGES_TOKEN: ${{ secrets.FREEREAC_PAGES_TOKEN }}
 ```
 
@@ -51,7 +51,7 @@ reviewed PR that changes `import/manifest.txt` (exact file names and sha256, new
 4. records the tree in one signed commit, then proves a clean `dnf install` (Fedora 44, 45) and `apt-get install` (trixie) from
    the tree with signature checks on.
 
-The key never reaches a session: it is a repository secret used inside the run. There is no dispatch trigger.
+The key never reaches a session: it is a secret used inside the run. The import also drops any package already in the tree that this key does not vouch for (one signed by a retired key). There is no dispatch trigger.
 
 ## The prune of the OpenMixer channel's copies, in order
 
