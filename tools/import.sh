@@ -51,17 +51,26 @@ place() {
     while IFS= read -r p; do
         rpmkeys --root "$ks" --checksig "$p" 2>/dev/null | grep -q 'digests signatures OK' || { echo "dropped $p: not signed by the channel key"; rm -f "$p"; }
     done < <(find "$root/rpm/fedora" -name '*.rpm' 2>/dev/null)
+    # a noarch package of the OpenMixer channel lives in its noarch tree; this channel's repository file asks for the architecture's
+    # directory alone (dnf's $basearch never resolves to a sibling noarch/), so a noarch package is placed INSIDE each architecture
+    # directory of its Fedora release, and no noarch tree exists here
     for d in $(cd "$dir" && find rpm -type d -path 'rpm/fedora/*/*' | sort); do
-        mkdir -p "$root/$d"
         for f in "$dir/$d"/*.rpm; do
             [ -e "$f" ] || continue
             # the payload and header are untouched; only the signature header is replaced
             rpmsign --delsign "$f" >/dev/null
             rpmsign --addsign --define "_gpg_name $key" --define "_gpg_sign_cmd_extra_args --pinentry-mode loopback" "$f" >/dev/null
-            cp "$f" "$root/$d/"
         done
+        if [ "$(basename "$d")" = noarch ]; then
+            local rel=${d%/noarch} targets
+            targets=$( { (cd "$dir" && find "$rel" -mindepth 1 -maxdepth 1 -type d ! -name noarch ! -name SRPMS); (cd "$root" 2>/dev/null && find "$rel" -mindepth 1 -maxdepth 1 -type d ! -name noarch ! -name SRPMS) || true; } 2>/dev/null | sort -u)
+            [ -n "$targets" ] || { echo "no architecture directory of $rel to place the noarch packages in" >&2; exit 1; }
+            for t in $targets; do mkdir -p "$root/$t"; cp "$dir/$d"/*.rpm "$root/$t/" 2>/dev/null || true; done
+        else
+            mkdir -p "$root/$d"; cp "$dir/$d"/*.rpm "$root/$d/" 2>/dev/null || true
+        fi
     done
-    for d in $(cd "$dir" && find deb -type d -path 'deb/debian/*/*' | sort); do
+    for d in $([ -d "$dir/deb" ] && cd "$dir" && find deb -type d -path 'deb/debian/*/*' | sort); do
         mkdir -p "$root/$d"; cp -n "$dir/$d"/*.deb "$root/$d/" 2>/dev/null || true
     done
     "$(dirname "$(readlink -f "$0")")/prune-newest-two.sh" "$root"
@@ -69,7 +78,7 @@ place() {
         createrepo_c --quiet --general-compress-type=gz "$root/$d"
         gpg --batch --yes --pinentry-mode loopback --armor --detach-sign -u "$key" --output "$root/$d/repodata/repomd.xml.asc" "$root/$d/repodata/repomd.xml"
     done
-    for suite in $(cd "$root" && ls deb/debian 2>/dev/null); do
+    for suite in $([ -d "$root/deb/debian" ] && ls "$root/deb/debian"); do
         (cd "$root/deb/debian/$suite"
          # one flat index of the suite: Filename is ./<arch>/<file>, and apt takes the packages of its own architecture
          apt-ftparchive packages . > Packages && gzip -kf9 Packages
@@ -78,7 +87,7 @@ place() {
          gpg --batch --yes --pinentry-mode loopback --clearsign -u "$key" --output InRelease Release)
     done
     gpg --batch --armor --export "$key" > "$root/rpm/RPM-GPG-KEY-freereac"
-    gpg --batch --armor --export "$key" > "$root/deb/freereac.asc"
+    if [ -d "$root/deb" ]; then gpg --batch --armor --export "$key" > "$root/deb/freereac.asc"; fi
 }
 
 case $cmd in

@@ -9,7 +9,7 @@ arg=${2:?usage: check-newest-two.sh manifest <file> | tree <root>}
 list=$(mktemp); trap 'rm -f "$list"' EXIT
 case $mode in
 manifest) awk '$1 == "rpm" || $1 == "deb" {print $2, $3}' "$arg" > "$list" ;;
-tree) (cd "$arg" && find rpm/fedora deb/debian \( -name '*.rpm' -o -name '*.deb' \) ! -path '*/SRPMS/*' | sed 's|/\([^/]*\)$| \1|') > "$list" ;;
+tree) (cd "$arg" && find $(ls -d rpm/fedora deb/debian 2>/dev/null) \( -name '*.rpm' -o -name '*.deb' \) ! -path '*/SRPMS/*' | sed 's|/\([^/]*\)$| \1|') > "$list" ;;
 *) echo "unknown mode $mode" >&2; exit 2 ;;
 esac
 # <dir> <file> -> <dir> <package> <version>, one line per file; an rpm is name-version-release.dist.arch.rpm, a deb name_version_arch.deb
