@@ -7,7 +7,7 @@ name: channel import
 # install from it. There is no dispatch trigger: a publish is a merge of a reviewed manifest (docs/design.md).
 #
 # Secrets (names only): FREEREAC_PACKAGES_SIGNING_KEY and FREEREAC_PACKAGES_SIGNING_PASSPHRASE sign the packages and the metadata (the
-# dedicated FreeREAC release key, never a personal one); OPENMIXER_CI_SIGNING_KEY signs the channel commit. The variable
+# dedicated FreeREAC release key, never a personal one); OPENMIXER_CI_SIGNING_KEY signs the channel commit and FREEREAC_PAGES_TOKEN pushes it. The variable
 # FREEREAC_RELEASE_KEY_FPR (organisation) is the one place that pins the fingerprint of the key the channel signs with.
 
 on:
@@ -46,7 +46,10 @@ jobs:
       - name: Tools
         run: dnf install -y --setopt=install_weak_deps=False rpm-sign createrepo_c apt-utils gnupg2 pinentry findutils git curl diffutils tar gzip
 
+      # the push uses the pages token, not the workflow's own: a push made with GITHUB_TOKEN builds no Pages deployment
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.FREEREAC_PAGES_TOKEN }}
 
       - name: Import the channel key and check it is the pinned one
         env:
