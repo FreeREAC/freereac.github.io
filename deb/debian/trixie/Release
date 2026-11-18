@@ -1,0 +1,19 @@
+Date: Wed, 18 Nov 2026 20:19:24 +0000
+Label: FreeREAC
+Origin: FreeREAC
+MD5Sum:
+ b335969cc4c13be53977969df2e7707e            21885 Packages
+ 4321e3d1b8cc89f1a9dc0a6644400247             5830 Packages.gz
+ 82bd3f3cd69bd309be6b8bc3cf938129               71 Release
+SHA1:
+ 3db52dd4e5920d444113a2add14d0d2ec97be705            21885 Packages
+ f6afbc1c27b6eefc350c91564970ad8ed5328b3f             5830 Packages.gz
+ 19649b2d94ebc192c979ef61c5af34de6b48d5d6               71 Release
+SHA256:
+ ffe41989285faf8b6138a7cd9ac9f4f24eec4f0b81abbed95b6ea5d11c237b74            21885 Packages
+ a5ef50b86eb02a64481c2ce68e0aaf04c61e711f2b7fcfdf5028abf1e732db6d             5830 Packages.gz
+ 4cc01b9795d85942cb70599df8b06e1ed635f0fdaab96e785a0e17082a7bb6d7               71 Release
+SHA512:
+ 412af2124c13c819cdb1384da7f3c3101e3ca337d36099f2908216708f48a844b13e0eda68b29b9a2fe3686bbe15cb04b1c7b1ff46fafa1b800b2f07068eded0            21885 Packages
+ 43eca77919f88944c766dbf15df79b18ca73b63f1d5d09eead2f0471998fa346134c1275b8affd703d0d80a2b809c0623f924bd680185befab6a499e8818306f             5830 Packages.gz
+ 1b8415c0fff81cb197918be4a0bd57dedc1797e00778af1b430295df4bd3d06f7fddce173479ef945bc92d174d9a668b6ed4b24675c88dedae1e3c615f62ca13               71 Release
