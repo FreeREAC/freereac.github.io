@@ -2,8 +2,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Pau Aliagas <linuxnow@gmail.com>
 # The repository file freereac-release installs names the channel's TWO dnf trees, as openmixer.repo does: freereac (fedora/<release>/$basearch)
-# and freereac-noarch (fedora/<release>/noarch), both signed-metadata and signed-package checked with the one key. A noarch package the
-# channel publishes (this release package, a released -devel) lives in the noarch tree, which a client with only the first repository never reads.
+# and freereac-noarch (fedora/<release>/noarch), both checked, metadata and packages, with the one key. The architecture directories hold what
+# the import places (the OpenMixer channel's noarch packages go inside each of them); the noarch/ tree holds what the shared publish places
+# there (freereac-release, future noarch releases per the release matrix), which a client with only the first repository would never read.
 set -euo pipefail
 here=$(dirname "$(readlink -f "$0")")
 f=$here/freereac.repo

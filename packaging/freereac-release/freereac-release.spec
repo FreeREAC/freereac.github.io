@@ -31,7 +31,7 @@ install -Dpm 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-
 
 %changelog
 * Wed Nov 18 2026 Pau Aliagas <linuxnow@gmail.com> - 1-2
-- A freereac-noarch repository beside freereac, as openmixer-noarch is: a noarch package of the channel (this package, a released -devel) is published into the channel's noarch tree, which a dnf client did not read. The one key is unchanged.
+- A freereac-noarch repository beside freereac, as openmixer-noarch is: the architecture directories hold what the import places, the noarch/ tree holds what the shared publish places there (this package, future noarch releases per the release matrix), and a client reading the first repository alone never saw the second. The one key is unchanged.
 
 * Wed Nov 18 2026 Pau Aliagas <linuxnow@gmail.com> - 1-1
 - The FreeREAC repository, ids freereac, and its one key
