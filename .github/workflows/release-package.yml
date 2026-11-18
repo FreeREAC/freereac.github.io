@@ -1,0 +1,227 @@
+name: freereac-release
+
+# Builds freereac-release, the package that adds the FreeREAC repository (packaging/freereac-release), as an RPM (Fedora 44 and 45)
+# and a DEB, each carrying the channel's ONE public key, and publishes them into this channel: as packages of the repository, and
+# at the stable names rpm/freereac-release.noarch.rpm and deb/freereac-release.deb that a new machine installs.
+#
+# A tag freereac-release-<Version>-<Release>, the spec's (and debian/changelog's), is a release: it signs and publishes. Anything
+# else is a dry run: the packages are built and install-checked against the channel as it is served, nothing is signed or
+# published. The channel must already serve libreac (the import, docs/design.md): the install check installs it through the
+# repository the package adds.
+#
+# Secrets (names only): FREEREAC_PACKAGES_SIGNING_KEY and FREEREAC_PACKAGES_SIGNING_PASSPHRASE sign; OPENMIXER_CI_SIGNING_KEY signs
+# the channel commit; PAGES_TOKEN pushes (FREEREAC_PAGES_TOKEN). Variable: FREEREAC_RELEASE_KEY_FPR, the one place that pins the key.
+
+on:
+  push:
+    tags: ['freereac-release-*']
+  pull_request:
+    paths: ['packaging/freereac-release/**', '.github/workflows/release-package.yml']
+
+permissions:
+  contents: read
+
+env:
+  CHANNEL: FreeREAC/freereac.github.io
+  FREEREAC_RELEASE_KEY_FPR: ${{ vars.FREEREAC_RELEASE_KEY_FPR }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  preflight:
+    name: Read the release the packaging carries
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      evr: ${{ steps.release.outputs.evr }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: release
+        run: |
+          set -euo pipefail
+          spec=packaging/freereac-release/freereac-release.spec
+          evr=$(sed -n 's/^Version: *//p' "$spec")-$(sed -n 's/^Release: *\([0-9][0-9.]*\)%{?dist}$/\1/p' "$spec")
+          echo "evr=$evr" >> "$GITHUB_OUTPUT"
+          if [ "$GITHUB_EVENT_NAME" = push ] && [ "$GITHUB_REF_TYPE" = tag ]; then
+            [ "$GITHUB_REF_NAME" = "freereac-release-$evr" ] ||
+              { echo "::error::tag $GITHUB_REF_NAME is not freereac-release-$evr, the release of the packaging"; exit 1; }
+          fi
+
+  build-checks:
+    name: The build refuses a key that is not the channel's
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { image: 'fedora:44', kind: rpm, tools: 'dnf install -y --setopt=install_weak_deps=False rpm-build gnupg2 findutils diffutils' }
+          - { image: 'debian:trixie', kind: deb, tools: 'apt-get update -qq && apt-get install -y --no-install-recommends build-essential dpkg-dev debhelper lintian gnupg' }
+    container:
+      image: ${{ matrix.image }}
+    steps:
+      - run: ${{ matrix.tools }}
+      - uses: actions/checkout@v4
+      - run: KIND=${{ matrix.kind }} packaging/freereac-release/test-build.sh
+
+  rpm:
+    name: Build the RPM (fc${{ matrix.fedora }}) and install it
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: fedora:${{ matrix.fedora }}
+    strategy:
+      fail-fast: false
+      matrix:
+        fedora: ['44', '45']
+    steps:
+      - run: dnf install -y --setopt=install_weak_deps=False rpm-build gnupg2 curl findutils diffutils
+      - uses: actions/checkout@v4
+      - run: packaging/freereac-release/build.sh rpm rpm/RPM-GPG-KEY-freereac rpms
+      - name: Install it in this clean fedora and install libreac through the repository it adds
+        run: SIGNED=0 packaging/freereac-release/install-check.sh rpms/freereac-release-*.noarch.rpm libreac
+      - uses: actions/upload-artifact@v4
+        with:
+          name: freereac-release-rpm-fc${{ matrix.fedora }}
+          path: rpms/*.rpm
+          if-no-files-found: error
+          retention-days: ${{ startsWith(github.ref, 'refs/tags/') && 30 || 2 }}
+
+  deb:
+    name: Build the DEB and install it
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: debian:trixie
+    steps:
+      - run: apt-get update -qq && apt-get install -y --no-install-recommends build-essential dpkg-dev debhelper lintian gnupg curl ca-certificates
+      - uses: actions/checkout@v4
+      - run: packaging/freereac-release/build.sh deb deb/freereac.asc debs
+      - name: Install it in this clean debian and install libreac7 through the source it adds
+        run: |
+          chmod 755 debs && chmod 644 debs/*.deb
+          packaging/freereac-release/install-check.sh debs/freereac-release_*_all.deb libreac7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: freereac-release-deb
+          path: debs/*.deb
+          if-no-files-found: error
+          retention-days: ${{ startsWith(github.ref, 'refs/tags/') && 30 || 2 }}
+
+  publish-rpm:
+    name: Sign and publish the RPM
+    needs: [preflight, build-checks, rpm, deb]
+    if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: fedora:44
+    # one writer to the channel at a time, with the import
+    concurrency:
+      group: channel-import
+      cancel-in-progress: false
+    env:
+      EVR: ${{ needs.preflight.outputs.evr }}
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: freereac-release-rpm-*
+          merge-multiple: true
+          path: collected
+      - name: Every release has its build
+        run: |
+          set -euo pipefail
+          for rel in 44 45; do ls collected/freereac-release-"$EVR".fc"$rel".noarch.rpm >/dev/null || { echo "::error::no build for fc$rel"; exit 1; }; done
+          echo "STABLE=freereac-release-$EVR.fc44.noarch.rpm" >> "$GITHUB_ENV"
+      - uses: Open-Mixer/.github/.github/actions/publish-rpms@openmixer-v1
+        with:
+          rpm-dir: collected
+          tag: freereac-release-${{ needs.preflight.outputs.evr }}
+          sign: 'true'
+          gpg-key: ${{ secrets.FREEREAC_PACKAGES_SIGNING_KEY }}
+          gpg-passphrase: ${{ secrets.FREEREAC_PACKAGES_SIGNING_PASSPHRASE }}
+          publish-token: ${{ secrets.FREEREAC_PAGES_TOKEN }}
+          site-gpg-key: ${{ secrets.OPENMIXER_CI_SIGNING_KEY }}
+          channel: ${{ env.CHANNEL }}
+          key-file: RPM-GPG-KEY-freereac
+          committed-keys: 'false'
+          signing-fingerprint: ${{ vars.FREEREAC_RELEASE_KEY_FPR }}
+          repo-file: packaging/freereac-release/freereac.repo
+          installability: 'false'
+          served-url: https://freereac.github.io/rpm
+      - name: Place the stable name
+        run: |
+          set -euo pipefail
+          install -m 0644 "signed/$STABLE" build/channel/rpm/freereac-release.noarch.rpm
+          rpm -qp --qf '%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH} %{SIGPGP:pgpsig}\n' build/channel/rpm/freereac-release.noarch.rpm
+      - uses: Open-Mixer/.github/.github/actions/channel-push@openmixer-v1
+        with:
+          publish-token: ${{ secrets.FREEREAC_PAGES_TOKEN }}
+          site-gpg-key: ${{ secrets.OPENMIXER_CI_SIGNING_KEY }}
+          channel: ${{ env.CHANNEL }}
+          tag: freereac-release-${{ needs.preflight.outputs.evr }}
+          what: rpm
+          rebuild: 'install -m 0644 signed/${{ env.STABLE }} build/channel/rpm/freereac-release.noarch.rpm'
+
+  publish-deb:
+    name: Sign and publish the DEB
+    needs: [preflight, build-checks, rpm, deb]
+    if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: debian:trixie
+    concurrency:
+      group: channel-import
+      cancel-in-progress: false
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: freereac-release-deb
+          path: built
+      # one Architecture: all package, the same file in the tree of the suite the channel serves
+      - name: Lay the package out by Debian release
+        run: |
+          set -euo pipefail
+          mkdir -p collected/trixie
+          cp built/freereac-release_*_all.deb collected/trixie/
+      - uses: Open-Mixer/.github/.github/actions/publish-debs@openmixer-v1
+        with:
+          deb-dir: collected
+          tag: freereac-release-${{ needs.preflight.outputs.evr }}
+          sign: 'true'
+          gpg-key: ${{ secrets.FREEREAC_PACKAGES_SIGNING_KEY }}
+          gpg-passphrase: ${{ secrets.FREEREAC_PACKAGES_SIGNING_PASSPHRASE }}
+          publish-token: ${{ secrets.FREEREAC_PAGES_TOKEN }}
+          site-gpg-key: ${{ secrets.OPENMIXER_CI_SIGNING_KEY }}
+          channel: ${{ env.CHANNEL }}
+          key-file: freereac.asc
+          committed-keys: 'false'
+          signing-fingerprint: ${{ vars.FREEREAC_RELEASE_KEY_FPR }}
+          label: FreeREAC
+          changelogs-url: ''
+          installability: 'false'
+          served-url: https://freereac.github.io/deb
+      - name: Place the stable name
+        run: |
+          set -euo pipefail
+          install -m 0644 built/freereac-release_*_all.deb build/channel/deb/freereac-release.deb
+          dpkg-deb -f build/channel/deb/freereac-release.deb Package Version Architecture
+      - uses: Open-Mixer/.github/.github/actions/channel-push@openmixer-v1
+        with:
+          publish-token: ${{ secrets.FREEREAC_PAGES_TOKEN }}
+          site-gpg-key: ${{ secrets.OPENMIXER_CI_SIGNING_KEY }}
+          channel: ${{ env.CHANNEL }}
+          tag: freereac-release-${{ needs.preflight.outputs.evr }}
+          what: deb
+          rebuild: 'install -m 0644 built/freereac-release_*_all.deb build/channel/deb/freereac-release.deb'

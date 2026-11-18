@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Pau Aliagas <linuxnow@gmail.com>
+Types: deb
+URIs: https://freereac.github.io/deb/debian/trixie/
+Suites: ./
+Signed-By: /usr/share/keyrings/freereac-archive-keyring.asc
