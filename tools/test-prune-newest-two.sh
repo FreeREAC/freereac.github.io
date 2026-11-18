@@ -12,4 +12,9 @@ for v in 1.9.0 1.10.0 1.11.0; do touch "$w/deb/debian/trixie/amd64/libreac7_${v}
 [ -e "$d/reac-pw-devel-1.0.11-1.fc44.x86_64.rpm" ] || { echo "FAIL: reac-pw-devel was mistaken for reac-pw"; exit 1; }
 [ ! -e "$w/deb/debian/trixie/amd64/libreac7_1.9.0_amd64.deb" ] || { echo "FAIL: the oldest deb was kept"; exit 1; }
 "$here/check-newest-two.sh" tree "$w" >/dev/null
+# a root that holds neither tree is refused by name, and nothing under it is touched
+mkdir -p "$w/empty-root/elsewhere"; touch "$w/empty-root/elsewhere/keep-1-1.fc44.x86_64.rpm"
+if out=$("$here/prune-newest-two.sh" "$w/empty-root" 2>&1); then echo "FAIL: pruning a root with neither tree passed"; exit 1; fi
+grep -q 'holds neither rpm/fedora nor deb/debian' <<< "$out" || { echo "FAIL: the refusal does not say why: $out"; exit 1; }
+[ -e "$w/empty-root/elsewhere/keep-1-1.fc44.x86_64.rpm" ] || { echo "FAIL: a file outside the trees was removed"; exit 1; }
 echo "prune-newest-two: ok"

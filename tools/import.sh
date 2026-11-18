@@ -42,6 +42,23 @@ fetch() {
     done < "$manifest"
 }
 
+# copy every <ext> file of <src> into <dest>, or fail by name: an empty directory is refused (the manifest put it there), and a copy that
+# fails (unreadable file, full disk, permission) stops the run, so a tree missing packages is never published
+copy_all() {
+    local src=$1 dest=$2 ext=$3 files
+    shopt -s nullglob
+    files=("$src"/*."$ext")
+    shopt -u nullglob
+    [ "${#files[@]}" -gt 0 ] || { echo "FAIL: $src holds no .$ext file to place, though the manifest listed it" >&2; return 1; }
+    mkdir -p "$dest"
+    local f keep=()
+    for f in "${files[@]}"; do
+        # a published deb is immutable: one already in the tree is kept, named; the rest are copied and any failure stops the run
+        if [ "$ext" = deb ] && [ -e "$dest/$(basename "$f")" ]; then echo "kept $dest/$(basename "$f"): already published"; else keep+=("$f"); fi
+    done
+    [ "${#keep[@]}" -eq 0 ] || cp -- "${keep[@]}" "$dest/"
+}
+
 place() {
     local dir=$1 root=$2 key=$3 d f p kind
     export GPG_TTY=
@@ -65,13 +82,13 @@ place() {
             local rel=${d%/noarch} targets
             targets=$( { (cd "$dir" && find "$rel" -mindepth 1 -maxdepth 1 -type d ! -name noarch ! -name SRPMS); (cd "$root" 2>/dev/null && find "$rel" -mindepth 1 -maxdepth 1 -type d ! -name noarch ! -name SRPMS) || true; } 2>/dev/null | sort -u)
             [ -n "$targets" ] || { echo "no architecture directory of $rel to place the noarch packages in" >&2; exit 1; }
-            for t in $targets; do mkdir -p "$root/$t"; cp "$dir/$d"/*.rpm "$root/$t/" 2>/dev/null || true; done
+            for t in $targets; do copy_all "$dir/$d" "$root/$t" rpm; done
         else
-            mkdir -p "$root/$d"; cp "$dir/$d"/*.rpm "$root/$d/" 2>/dev/null || true
+            copy_all "$dir/$d" "$root/$d" rpm
         fi
     done
     for d in $([ -d "$dir/deb" ] && cd "$dir" && find deb -type d -path 'deb/debian/*/*' | sort); do
-        mkdir -p "$root/$d"; cp -n "$dir/$d"/*.deb "$root/$d/" 2>/dev/null || true
+        copy_all "$dir/$d" "$root/$d" deb
     done
     "$(dirname "$(readlink -f "$0")")/prune-newest-two.sh" "$root"
     for d in $(cd "$root" && find rpm/fedora -mindepth 2 -maxdepth 2 -type d ! -name SRPMS | sort); do

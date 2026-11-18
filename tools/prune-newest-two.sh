@@ -3,6 +3,7 @@
 set -euo pipefail
 root=${1:?usage: prune-newest-two.sh <channel root>}
 cd "$root"
+[ -d rpm/fedora ] || [ -d deb/debian ] || { echo "FAIL: $root holds neither rpm/fedora nor deb/debian: not a channel tree, nothing was pruned" >&2; exit 1; }
 # per directory, per package: list distinct versions, drop all but the 2 newest (a version may be one file)
 find $(ls -d rpm/fedora deb/debian 2>/dev/null) \( -name '*.rpm' -o -name '*.deb' \) ! -path '*/SRPMS/*' | while read -r path; do
     dir=$(dirname "$path"); f=$(basename "$path")

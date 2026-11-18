@@ -21,4 +21,11 @@ rpm -K "$w/root/rpm/fedora/44/x86_64/pkg-devel-1-1.fc44.noarch.rpm" | grep -q 's
 printf '[t]\nname=t\nbaseurl=file://%s/rpm/fedora/44/$basearch/\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=file://%s\n' "$w/root" "$w/k.asc" > /etc/yum.repos.d/t.repo
 dnf -y -q --disablerepo='*' --enablerepo=t --forcearch=x86_64 install pkg-devel > /dev/null 2>&1 || { echo "FAIL: dnf cannot install the noarch package from the architecture repository"; exit 1; }
 rpm -q pkg-devel > /dev/null
+# a copy that fails stops the run (a cp that fails, in the PATH: the tree is never published without its packages), and a directory with no
+# package is refused by name
+mkdir "$w/shim"; printf '#!/bin/sh\nexit 1\n' > "$w/shim/cp"; chmod +x "$w/shim/cp"
+if out=$(PATH="$w/shim:$PATH" "$here/import.sh" place "$w/dl" "$w/root-cpfail" "$K" 2>&1); then echo "FAIL: a failed copy was swallowed"; exit 1; fi
+mkdir -p "$w/dl-empty/rpm/fedora/44/x86_64"
+if out=$("$here/import.sh" place "$w/dl-empty" "$w/root-empty" "$K" 2>&1); then echo "FAIL: an empty directory was placed silently"; exit 1; fi
+grep -q 'rpm/fedora/44/x86_64 holds no .rpm file to place' <<< "$out" || { echo "FAIL: the empty directory is not named: $out"; exit 1; }
 echo "place-noarch: ok"
