@@ -1,0 +1,140 @@
+name: channel import
+
+# The FreeREAC channel is populated by MOVING packages the OpenMixer channel already carries, never by re-running releases.
+# Merging a reviewed PR that changes import/manifest.txt (exact files, checksummed) runs this once: it downloads them, verifies
+# each, re-signs the rpm signature headers with FreeREAC's one key, copies the debs as they are, regenerates and signs the rpm
+# repodata and the deb index, keeps the newest 2 versions of each package, records the tree and proves a clean dnf and apt
+# install from it. There is no dispatch trigger: a publish is a merge of a reviewed manifest (docs/design.md).
+#
+# Secrets (names only): FREEREAC_PACKAGES_SIGNING_KEY and FREEREAC_PACKAGES_SIGNING_PASSPHRASE sign the packages and the metadata (the
+# dedicated FreeREAC release key, never a personal one); OPENMIXER_CI_SIGNING_KEY signs the channel commit and FREEREAC_PAGES_TOKEN pushes it. The variable
+# FREEREAC_RELEASE_KEY_FPR (organisation) is the one place that pins the fingerprint of the key the channel signs with.
+
+on:
+  pull_request:
+    paths: ['import/**', 'tools/**', '.github/workflows/import.yml']
+  push:
+    branches: [main]
+    paths: ['import/manifest.txt']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: channel-import
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: The checks of the import tools
+        run: |
+          set -euo pipefail
+          tools/test-check-newest-two.sh
+          tools/test-prune-newest-two.sh
+      - name: The manifest keeps the newest 2 versions of each package per tree
+        run: tools/check-newest-two.sh manifest import/manifest.txt
+      - name: The served public key files hold exactly the channel's one key
+        env:
+          FPR: ${{ vars.FREEREAC_RELEASE_KEY_FPR }}
+        run: |
+          set -euo pipefail
+          tools/test-check-channel-key.sh
+          tools/check-channel-key.sh "$FPR" rpm/RPM-GPG-KEY-freereac deb/freereac.asc
+
+  import:
+    needs: check
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    container: fedora:44
+    steps:
+      - name: Tools
+        run: dnf install -y --setopt=install_weak_deps=False rpm-sign createrepo_c apt-utils gnupg2 pinentry findutils git curl diffutils tar gzip
+
+      # the push uses the pages token, not the workflow's own: a push made with GITHUB_TOKEN builds no Pages deployment
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.FREEREAC_PAGES_TOKEN }}
+
+      - name: Import the channel key and check it is the pinned one
+        env:
+          KEY: ${{ secrets.FREEREAC_PACKAGES_SIGNING_KEY }}
+          PASS: ${{ secrets.FREEREAC_PACKAGES_SIGNING_PASSPHRASE }}
+          WANT: ${{ vars.FREEREAC_RELEASE_KEY_FPR }}
+        run: |
+          set -euo pipefail
+          test -n "$KEY" || { echo "::error::the secret FREEREAC_PACKAGES_SIGNING_KEY is not set"; exit 1; }
+          mkdir -p ~/.gnupg && chmod 700 ~/.gnupg
+          printf '%s\n' "$KEY" | gpg --batch --import
+          fpr=$(printf '%s\n' "$KEY" | gpg --batch --with-colons --import-options show-only --import 2>/dev/null | awk -F: '/^(pub|sec):/ {p = 1; next} /^fpr:/ && p {print $10; exit}')
+          want=$(printf '%s' "$WANT" | tr -d '[:space:]')
+          [[ $want =~ ^[0-9A-F]{40}$ ]] || { echo "::error::the variable FREEREAC_RELEASE_KEY_FPR holds '$want', not a key fingerprint: the owner sets it to the channel's release key first"; exit 1; }
+          [ "$fpr" = "$want" ] || { echo "::error::the signing secret is $fpr, not the key this channel signs with"; exit 1; }
+          echo allow-loopback-pinentry >> ~/.gnupg/gpg-agent.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          if [ -n "$PASS" ]; then printf '%s' "$PASS" > ~/.gnupg/passphrase; chmod 600 ~/.gnupg/passphrase; echo "passphrase-file $HOME/.gnupg/passphrase" >> ~/.gnupg/gpg.conf; fi
+          gpgconf --kill gpg-agent || true
+          echo "KEY_FPR=$fpr" >> "$GITHUB_ENV"
+
+      - name: Download and verify the manifest's packages
+        run: tools/import.sh fetch import/manifest.txt "$RUNNER_TEMP/dl"
+
+      - name: Re-sign, regenerate and sign the metadata, keep the newest 2
+        run: |
+          set -euo pipefail
+          tools/import.sh place "$RUNNER_TEMP/dl" "$PWD" "$KEY_FPR"
+          tools/check-newest-two.sh tree "$PWD"
+
+      - name: Record the tree in one signed commit
+        env:
+          COMMIT_KEY: ${{ secrets.OPENMIXER_CI_SIGNING_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$COMMIT_KEY" || { echo "::error::OPENMIXER_CI_SIGNING_KEY is not set: a channel commit is signed"; exit 1; }
+          printf '%s\n' "$COMMIT_KEY" | gpg --batch --import
+          ckey=$(printf '%s\n' "$COMMIT_KEY" | gpg --batch --with-colons --import-options show-only --import 2>/dev/null | awk -F: '/^(pub|sec):/ {p = 1; next} /^fpr:/ && p {print $10; exit}')
+          git config --global --add safe.directory "$PWD"
+          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.signingkey "$ckey"; git config commit.gpgsign true
+          git add -A rpm deb
+          git diff --cached --quiet && { echo "the channel already serves this manifest"; exit 0; }
+          git commit -q -m "Import the packages of import/manifest.txt from the OpenMixer channel, re-signed with the FreeREAC key" -- rpm deb
+          git push origin HEAD:main
+
+  prove:
+    needs: import
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { image: 'fedora:44', kind: rpm }
+          - { image: 'fedora:45', kind: rpm }
+          - { image: 'debian:trixie', kind: deb }
+    runs-on: ubuntu-latest
+    container: ${{ matrix.image }}
+    steps:
+      - name: Git for the checkout
+        run: if command -v dnf >/dev/null; then dnf install -y -q git; else apt-get update -qq && apt-get install -y -qq git ca-certificates; fi
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: A clean install from the channel tree, signatures on
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ matrix.kind }}" = rpm ]; then
+            cp rpm/RPM-GPG-KEY-freereac /etc/pki/rpm-gpg/
+            printf '%s\n' '[freereac]' 'name=freereac' "baseurl=file://$PWD/rpm/fedora/\$releasever/\$basearch/" gpgcheck=1 repo_gpgcheck=1 \
+              'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-freereac' > /etc/yum.repos.d/freereac.repo
+            dnf -y install reac-pw reac-stageboxes
+            rpm -q libreac reac-pw reac-stageboxes
+          else
+            apt-get install -y -qq --no-install-recommends gnupg
+            cp deb/freereac.asc /usr/share/keyrings/freereac.asc
+            echo "deb [signed-by=/usr/share/keyrings/freereac.asc] file://$PWD/deb/debian/trixie ./" > /etc/apt/sources.list.d/freereac.list
+            apt-get update -qq
+            apt-get install -y -qq --no-install-recommends reac-pw reac-stageboxes
+            dpkg -s libreac7 reac-pw reac-stageboxes | grep -c '^Status: install ok installed'
+          fi

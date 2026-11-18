@@ -1,36 +1,23 @@
 # FreeREAC package repository
 
-The first FreeREAC package repository: signed RPMs of the REAC transport stack
-(`libreac`, `libreac-transport`, `reac-pw`) and of `mod-host`, up to the versions
-it already carries. It receives no new packages.
+The package repository of FreeREAC, the free implementation of the Roland REAC audio network: signed packages of `libreac`,
+`reac-pw` and `reac-stageboxes`. It is the only home of FreeREAC packages and has a signing key of its own.
 
-New releases of the REAC stack and of the OpenMixer console are published in the
-[OpenMixer channel](https://www.openmixer.org). Install its release package and
-take `reac-pw` from there:
+| tree | contents |
+| --- | --- |
+| `rpm/fedora/{44,45}/{x86_64,aarch64}/` | the dnf repository (`repodata/` signed) |
+| `deb/debian/trixie/` | the apt repository, signed flat index |
+| `rpm/RPM-GPG-KEY-freereac`, `deb/freereac.asc` | the one public signing key |
+| `import/manifest.txt` | the exact files moved in from the OpenMixer channel |
+
+Install:
 
 ```bash
-sudo dnf install https://www.openmixer.org/rpm/openmixer-release.noarch.rpm
+sudo curl -fsSLo /etc/pki/rpm-gpg/RPM-GPG-KEY-freereac https://freereac.github.io/rpm/RPM-GPG-KEY-freereac
+sudo curl -fsSLo /etc/yum.repos.d/freereac.repo https://freereac.github.io/rpm/freereac.repo
 sudo dnf install reac-pw
 ```
 
-A machine that still has this repository enabled should disable it: `dnf` prefers
-the version it finds here when a dependency range points at it, and that version is
-older than the channel's.
-
-## What is here
-
-| path | contents |
-| --- | --- |
-| `rpm/` | the dnf repository: `fedora/<releasever>/<arch>/` + `repodata/` |
-| | noarch packages live **inside** each arch directory — `dnf`'s `$basearch` never resolves to a sibling `noarch/` tree |
-| `rpm/freereac.repo` | the repo definition (`gpgcheck=1`, `repo_gpgcheck=1`) |
-| `rpm/RPM-GPG-KEY-freereac` | the public signing key |
-
-Packages and the repository metadata are both signed. `dnf` verifies each
-package against the key above and verifies `repomd.xml` before trusting the
-metadata.
-
-## How it was published
-
-The release workflows of `libreac` and `reac-pw` published here until 2026-10-07
-(`createrepo_c`, detach-signed metadata). They publish to the OpenMixer channel now.
+Every package and the repository metadata are signed (`gpgcheck=1`, `repo_gpgcheck=1`); the channel keeps the newest 2 versions
+of each package. The design, the release path, the way packages are moved in and the order of the prune of the OpenMixer
+channel's copies are in [docs/design.md](docs/design.md).

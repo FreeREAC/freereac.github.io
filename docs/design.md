@@ -1,0 +1,63 @@
+# The FreeREAC channel
+
+FreeREAC publishes its packages in its own channel, this repository, served at <https://freereac.github.io>. It is the only
+home of FreeREAC packages: `libreac`, `reac-pw`, `reac-stageboxes` (and their `-devel`, `-tests`, `-transport` subpackages).
+
+| | |
+| --- | --- |
+| rpm | `rpm/fedora/{44,45}/{x86_64,aarch64}/` as the release matrix publishes, `SRPMS/` beside them |
+| deb | `deb/debian/trixie/<arch>/`, one signed flat index per suite |
+| key | **one** dedicated FreeREAC release key, `FreeREAC Release Signing Key <packages@freereac.org>`, fingerprint `97C92ED0E2D65B603A93D4711A72E09298D9C0F6`, made for this channel and nothing else (no personal key signs here). The workflows read the fingerprint from one place only, the organisation variable `FREEREAC_RELEASE_KEY_FPR` (set to that fingerprint); `tools/check-channel-key.sh` checks on every pull request that the served key files hold exactly that one key, and the key in the secrets `FREEREAC_PACKAGES_SIGNING_KEY` and `FREEREAC_PACKAGES_SIGNING_PASSPHRASE`; public half `rpm/RPM-GPG-KEY-freereac` and `deb/freereac.asc` |
+| retention | the newest 2 versions of each package in each tree; a check fails by name above 2 |
+
+The channel shares no key, no release package and no packages with the OpenMixer channel.
+
+## The one coupling with OpenMixer
+
+OpenMixer does not depend on FreeREAC. Its packages carry `Requires: reac-pw` (a floor only, no epochs) and nothing else of
+FreeREAC's. So that dnf and apt find `reac-pw`, `openmixer-release` `Requires: freereac-release`, which ships this channel's
+repository file and its one key, and nothing else. A machine that wants only REAC installs `freereac-release` alone.
+
+## Releasing a new build
+
+A release is a tag `v<version>` on the package repository, as before. Its `release.yml` calls the shared workflows of
+`Open-Mixer/.github` with this channel as the target (the new inputs `key-file`, `committed-keys`, `signing-fingerprint`,
+`repo-file`, `label`: `Open-Mixer/.github/docs/release-operations.md`):
+
+```yaml
+with:
+  target-repo: FreeREAC/freereac.github.io
+  base-url: https://freereac.github.io
+  key-file: RPM-GPG-KEY-freereac        # freereac.asc for the deb
+  committed-keys: false
+  signing-fingerprint: ${{ vars.FREEREAC_RELEASE_KEY_FPR }}
+  repo-file: packaging/freereac-release/freereac.repo
+secrets:
+  OPENMIXER_PACKAGES_SIGNING_KEY: ${{ secrets.FREEREAC_PACKAGES_SIGNING_KEY }}
+  PACKAGES_SIGNING_PASSPHRASE: ${{ secrets.FREEREAC_PACKAGES_SIGNING_PASSPHRASE }}
+  PAGES_TOKEN: ${{ secrets.FREEREAC_PAGES_TOKEN }}
+```
+
+## Populating the channel: a move, not a re-release
+
+The versions the OpenMixer channel already carries are moved here by `.github/workflows/import.yml`, run once by the merge of a
+reviewed PR that changes `import/manifest.txt` (exact file names and sha256, newest 2 versions per package per tree). The run:
+
+1. downloads each listed file from the OpenMixer channel and refuses a checksum that is not the manifest's, an rpm whose current
+   OpenMixer signature does not verify, and a deb the OpenMixer signed index does not list with that sha256;
+2. `rpmsign --delsign` then `--addsign` with the FreeREAC key: only the rpm signature header changes, the payload and the header
+   are the released bytes; the debs are copied as they are (a deb carries no signature, the signed index vouches for it);
+3. regenerates and signs the rpm repodata of each tree and the deb index, serves the key's public half, keeps the newest 2;
+4. records the tree in one signed commit, then proves a clean `dnf install` (Fedora 44, 45) and `apt-get install` (trixie) from
+   the tree with signature checks on.
+
+The key never reaches a session: it is a secret used inside the run. The import also drops any package already in the tree that this key does not vouch for (one signed by a retired key). There is no dispatch trigger.
+
+## The prune of the OpenMixer channel's copies, in order
+
+1. Merge the manifest PR; wait for `channel import` green, including the three `prove` jobs.
+2. Check the served channel: `curl https://freereac.github.io/rpm/fedora/44/x86_64/repodata/repomd.xml` answers, and a clean
+   machine installs `reac-pw` from it with `freereac-release` alone.
+3. Release `freereac-release`, then the `openmixer-release` that requires it (reviewed PRs; a tag each).
+4. Only then, one reviewed PR in `Open-Mixer/open-mixer.github.io` removes the FreeREAC package files from `rpm/` and `deb/`
+   and regenerates and signs the metadata. Not before.
