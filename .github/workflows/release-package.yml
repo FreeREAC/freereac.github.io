@@ -65,6 +65,7 @@ jobs:
       - run: ${{ matrix.tools }}
       - uses: actions/checkout@v4
       - run: KIND=${{ matrix.kind }} packaging/freereac-release/test-build.sh
+      - run: packaging/freereac-release/test-repo.sh
 
   rpm:
     name: Build the RPM (fc${{ matrix.fedora }}) and install it

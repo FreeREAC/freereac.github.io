@@ -68,9 +68,10 @@ place() {
     while IFS= read -r p; do
         rpmkeys --root "$ks" --checksig "$p" 2>/dev/null | grep -q 'digests signatures OK' || { echo "dropped $p: not signed by the channel key"; rm -f "$p"; }
     done < <(find "$root/rpm/fedora" -name '*.rpm' 2>/dev/null)
-    # a noarch package of the OpenMixer channel lives in its noarch tree; this channel's repository file asks for the architecture's
-    # directory alone (dnf's $basearch never resolves to a sibling noarch/), so a noarch package is placed INSIDE each architecture
-    # directory of its Fedora release, and no noarch tree exists here
+    # The channel has two dnf trees, both read by the repository file (freereac: fedora/<release>/$basearch, freereac-noarch:
+    # fedora/<release>/noarch). The architecture directories hold what THIS import places, so a noarch package of the OpenMixer channel's
+    # noarch tree is placed INSIDE each architecture directory of its release; the noarch/ tree holds what the shared publish places there
+    # (freereac-release, and future noarch releases per the release matrix) and the import never writes it.
     for d in $(cd "$dir" && find rpm -type d -path 'rpm/fedora/*/*' | sort); do
         for f in "$dir/$d"/*.rpm; do
             [ -e "$f" ] || continue
