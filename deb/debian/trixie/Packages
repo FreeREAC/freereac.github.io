@@ -1,3 +1,23 @@
+Package: freereac-release
+Architecture: all
+Version: 1-1
+Multi-Arch: foreign
+Priority: optional
+Section: admin
+Maintainer: Pau Aliagas <linuxnow@gmail.com>
+Installed-Size: 20
+Filename: ./all/freereac-release_1-1_all.deb
+Size: 3924
+MD5sum: 16df72a218f874ec3d7b0aa7f7846790
+SHA1: 088fcfb063f63c353ee0f776f392adca7de37bf2
+SHA256: 6b6cb3f3b15c51790dc728d5a170557bedcbe4fd19547ee433931e5e3ad2bfda
+SHA512: e174da43a3a1cb8ccf22fbb9751132680aa290ead641f89e7ecedad4b5fdba93eb68d0bb05219c73e968113bece4eddea1d7d8ea62a36c9fd062997347e26161
+Homepage: https://freereac.github.io
+Description: FreeREAC package repository configuration for apt
+ Adds the apt source of the FreeREAC repository, which carries libreac, reac-pw
+ and reac-stageboxes, with the key that signs its index. apt upgrade keeps this
+ configuration current.
+
 Package: reac-pw-dev
 Architecture: all
 Version: 1.0.44
