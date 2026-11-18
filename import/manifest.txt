@@ -1,0 +1,57 @@
+# FreeREAC channel import manifest. One line per file:  <rpm|deb> <directory in the OpenMixer channel> <file> <sha256>
+# Read by .github/workflows/import.yml when a reviewed PR that changes this file merges. Each file is fetched from
+# https://www.openmixer.org, its sha256 and its current signature checked, and it joins the FreeREAC channel (docs/design.md).
+# The channel keeps the newest 2 versions of each package in each tree: this list holds at most 2 per package per tree.
+# Taken from the OpenMixer channel 2026-11-18: libreac, reac-pw, reac-stageboxes (and their -devel/-tests/-transport
+# subpackages), fedora 44 + 45, every architecture published, deb trixie. mod-host is not listed (docs/design.md).
+rpm rpm/fedora/44/aarch64 libreac-1.11.0-1.fc44.aarch64.rpm 02860d7ee0745fa7290d15f542aa78696574358d44586be3dcfd9605d577b3cd
+rpm rpm/fedora/44/aarch64 libreac-devel-1.11.0-1.fc44.aarch64.rpm 6c88dacf1692ce504c8b980d620df0312740fa51cc582f631e3be97099c2860c
+rpm rpm/fedora/44/aarch64 libreac-tests-1.11.0-1.fc44.aarch64.rpm 60f72eee259ba97a630c30f0e91f0595abf0d1782facbfdeee5e478aebe9931c
+rpm rpm/fedora/44/aarch64 libreac-transport-1.11.0-1.fc44.aarch64.rpm 374eebe1d82faba07ce844184fc003bc2f7fe6f0d903d6b81929840b07fd8229
+rpm rpm/fedora/44/aarch64 libreac-transport-devel-1.11.0-1.fc44.aarch64.rpm ac2edb80f577dc4f648d458000a6b78985f06fe95f6ba98d7bbe63bb37bde481
+rpm rpm/fedora/44/aarch64 reac-pw-1.0.43-1.fc44.aarch64.rpm 5a215632f69cb8c95e12804b4bedb9e97191984bd29660ac13c5f3ebef786e03
+rpm rpm/fedora/44/aarch64 reac-stageboxes-0.1.0-1.fc44.aarch64.rpm adb73028052da3004cc807c6cd1a6d0773a01597c4f6da0171c4c80f2693ac2c
+rpm rpm/fedora/44/x86_64 libreac-1.11.0-1.fc44.x86_64.rpm 7fe95f539f38dfa0da2f4e578d34eeb112be119fe76ae59f2ad7ce4456ab2eeb
+rpm rpm/fedora/44/x86_64 libreac-devel-1.11.0-1.fc44.x86_64.rpm 15617652b678256e25868493a2e01b4e163fe608e8cb2e11dacf20f2f0723c95
+rpm rpm/fedora/44/x86_64 libreac-tests-1.11.0-1.fc44.x86_64.rpm 10fb04dfed1725d7f4db095fc01aa08952367027a83dbd88b581967f7e8fa1dd
+rpm rpm/fedora/44/x86_64 libreac-transport-1.11.0-1.fc44.x86_64.rpm b9487164bbe98b42269588979b6ab4af1cd5999071e8b44d97f4eee76cffa057
+rpm rpm/fedora/44/x86_64 libreac-transport-devel-1.11.0-1.fc44.x86_64.rpm e74a558ebce3cb851ccf5175591ffec582d45dda41e09cf2d252a597f5fa7e8f
+rpm rpm/fedora/44/x86_64 reac-pw-1.0.43-1.fc44.x86_64.rpm 7e0444cc7dc7074a7c18124080c6b2e1502327b4137d156653b3f337d6373c01
+rpm rpm/fedora/44/x86_64 reac-pw-1.0.44-1.fc44.x86_64.rpm 56386cf3744ed4806d44a049f470157d10ba6eaeb74653773c5d2927aa4537c0
+rpm rpm/fedora/44/x86_64 reac-pw-devel-1.0.44-1.fc44.noarch.rpm 24f57ce787a202c9610143405890455fc3d9e81d73e63fbcb86a12dac3db7a05
+rpm rpm/fedora/44/x86_64 reac-stageboxes-0.1.0-1.fc44.x86_64.rpm 218e3f466cce805e0a4da705b7623a50e7d70806d887f288995094f6580d227c
+rpm rpm/fedora/45/aarch64 libreac-1.11.0-1.fc45.aarch64.rpm 8c44a1ecb2b891974ead7d84ec134acabd8205daef48e3d590d53b39ddf5ee15
+rpm rpm/fedora/45/aarch64 libreac-devel-1.11.0-1.fc45.aarch64.rpm 13fdbc50b125e8321c59079352dddd8625fe958f430488ae619720fdaff6d2ee
+rpm rpm/fedora/45/aarch64 libreac-tests-1.11.0-1.fc45.aarch64.rpm db399a4b47f7a53000cbd9591938b7b5d451ba40c6c336b9b93d3502966e5336
+rpm rpm/fedora/45/aarch64 libreac-transport-1.11.0-1.fc45.aarch64.rpm e660a33caf5b418766088d6237ccc086f1090dc36c375c2240bad41a0e387351
+rpm rpm/fedora/45/aarch64 libreac-transport-devel-1.11.0-1.fc45.aarch64.rpm a8fe3590dc700e5df41d1a00967b726936bf7b276dafa1ab76e4be3cdd2411de
+rpm rpm/fedora/45/aarch64 reac-pw-1.0.43-1.fc45.aarch64.rpm 3ee8f0d59ec3df6897dd1637de2f2716a27743f34ac833adf2f2bd3c994a6c7d
+rpm rpm/fedora/45/aarch64 reac-stageboxes-0.1.0-1.fc45.aarch64.rpm 88d4d4dde56837f36448b7f008eb183b741f997b90d4890c7a19c2b488249a95
+rpm rpm/fedora/45/x86_64 libreac-1.11.0-1.fc45.x86_64.rpm 22af8b03eba54513d58ff61ade1ac68dd43337195af2e2f1dfd7520ea1974ba5
+rpm rpm/fedora/45/x86_64 libreac-devel-1.11.0-1.fc45.x86_64.rpm c7a6def51b9a04265b9d93169ddbbc522276e44f68a45cb615dc54b8f95fcf95
+rpm rpm/fedora/45/x86_64 libreac-tests-1.11.0-1.fc45.x86_64.rpm 9c4808ca175bfc68ad5153237b551931d42eac51aa8b75754e9910e5198d3da0
+rpm rpm/fedora/45/x86_64 libreac-transport-1.11.0-1.fc45.x86_64.rpm e34a3d9429afcd9d4744ef0e8a29f0c794d85b3075dc3d463726fef042e5efc2
+rpm rpm/fedora/45/x86_64 libreac-transport-devel-1.11.0-1.fc45.x86_64.rpm 924929d0796c0f52aa7cbc8e743b522ba16a8fa49c0be2e8f8a6dab1ded345e7
+rpm rpm/fedora/45/x86_64 reac-pw-1.0.43-1.fc45.x86_64.rpm 493fae7588b6acd9087d2afaae8b69a560d156f75d36071dd1b0715e234b62b7
+rpm rpm/fedora/45/x86_64 reac-pw-1.0.44-1.fc45.x86_64.rpm 88cc9cbf489a6ea395fed876dbb89e5ad1eca17af8bdfbaa58014753e11123f2
+rpm rpm/fedora/45/x86_64 reac-pw-devel-1.0.44-1.fc45.noarch.rpm 02000291604f5116e56558a1af8ca17c64aa7fd05a133a95f23ec5527a4cf9f9
+rpm rpm/fedora/45/x86_64 reac-stageboxes-0.1.0-1.fc45.x86_64.rpm 3e71429aff4ef54b6aed7173ac5d127abfa061de41988d5c7f742b1ba6821d39
+deb deb/debian/trixie/all reac-pw-dev_1.0.44_all.deb 382eec8f77552ff52f7518bf57d5dce0a49f60f94b7d0b7b1e32893dc7441544
+deb deb/debian/trixie/amd64 libreac-dev_1.11.0_amd64.deb 84938d5e0c801ff34687611255574575a403c1542fca4029fff30f0b40b16b15
+deb deb/debian/trixie/amd64 libreac-tests_1.11.0_amd64.deb 81e0589d918f55556752b4cc05392fff3f821d0e89a4b0299591f3d30c66dbb4
+deb deb/debian/trixie/amd64 libreac-transport-dev_1.11.0_amd64.deb 22ff038a5bf34c57916434ac1f2b34561e7d2f975d6ec99e9e085e381cfb7335
+deb deb/debian/trixie/amd64 libreac-transport7_1.11.0_amd64.deb f1f2024a6427cfb9a44277f41bb4dc037cae81a83e06c12ec49e2b89c608fff3
+deb deb/debian/trixie/amd64 libreac6_1.10.0_amd64.deb 17d13ef2fcdc1d86e47ccd6995b25f2e628f3ca76bd929fb9bbbff14f4da33b1
+deb deb/debian/trixie/amd64 libreac7_1.11.0_amd64.deb de5a5bb95a22511c5d31094fac1c8674a906da6fd98fc0adf2edd44669cb7304
+deb deb/debian/trixie/amd64 reac-pw_1.0.43_amd64.deb bb46a6f94fbf2a2ad1e692b57eae410a9b7c61a99569cf5235a033bb4782acba
+deb deb/debian/trixie/amd64 reac-pw_1.0.44_amd64.deb c040a224b0725d1db405b8c18efb6e30905591cb307e029213e34ad3b2112d69
+deb deb/debian/trixie/amd64 reac-stageboxes_0.1.0_amd64.deb 4bb9671ee750a15eb100a474f65755ec6f913857194208ba42e58823a7350eb3
+deb deb/debian/trixie/arm64 libreac-dev_1.11.0_arm64.deb 63631cb6a995c9c9b85995b04a6d3945b901760322e4fc4d745e5c12f29ca75c
+deb deb/debian/trixie/arm64 libreac-tests_1.11.0_arm64.deb 6007f4aba868ad250f76b647c4fa4652b434f1e8bfce379a3899edbfce3f46b4
+deb deb/debian/trixie/arm64 libreac-transport-dev_1.11.0_arm64.deb 39d84aaf7185af6e2e297c22204125c547c6fd2d7e0aa7ff4bf4dadf5364ffbd
+deb deb/debian/trixie/arm64 libreac-transport7_1.11.0_arm64.deb 3ab7f9cd625be79a838cd6f28fbd12207d222798a3e9375c191767d7b681095e
+deb deb/debian/trixie/arm64 libreac6_1.10.0_arm64.deb 2d885aa4b12545235b5a74fea0825f31e076e56ca5a25874eb431f1099cab68b
+deb deb/debian/trixie/arm64 libreac7_1.11.0_arm64.deb 8bc5e2321ee51933c656f84c1dd3bcc69262a2d80e57c2458e323c1ec726333f
+deb deb/debian/trixie/arm64 reac-pw_1.0.43_arm64.deb 9fcf65a2b9e2dacf6849f8878fc9a7459f213c4cd0625f52d68b0b14d6c09374
+deb deb/debian/trixie/arm64 reac-pw_1.0.44_arm64.deb 33bd7ca30da11096b86373e910aa5d8956a1bcfdb26a33ba8f6f4b7ad56c66a8
+deb deb/debian/trixie/arm64 reac-stageboxes_0.1.0_arm64.deb ad8ea36d0e1f7a493fa78f6bba5ef2dacf9a97f29afdebe8c8bd31c4d71c4ea8
