@@ -57,7 +57,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { image: 'fedora:44', kind: rpm, tools: 'dnf install -y --setopt=install_weak_deps=False rpm-build gnupg2 findutils diffutils' }
+          - { image: 'fedora:45', kind: rpm, tools: 'dnf install -y --setopt=install_weak_deps=False rpm-build gnupg2 findutils diffutils' }
           - { image: 'debian:trixie', kind: deb, tools: 'apt-get update -qq && apt-get install -y --no-install-recommends build-essential dpkg-dev debhelper lintian gnupg' }
     container:
       image: ${{ matrix.image }}
@@ -77,7 +77,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fedora: ['44', '45']
+        fedora: ['45']
     steps:
       - run: dnf install -y --setopt=install_weak_deps=False rpm-build gnupg2 curl findutils diffutils
       - uses: actions/checkout@v4
@@ -120,7 +120,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     container:
-      image: fedora:44
+      image: fedora:45
     # one writer to the channel at a time, with the import
     concurrency:
       group: channel-import
@@ -139,8 +139,8 @@ jobs:
       - name: Every release has its build
         run: |
           set -euo pipefail
-          for rel in 44 45; do ls collected/freereac-release-"$EVR".fc"$rel".noarch.rpm >/dev/null || { echo "::error::no build for fc$rel"; exit 1; }; done
-          echo "STABLE=freereac-release-$EVR.fc44.noarch.rpm" >> "$GITHUB_ENV"
+          for rel in 45; do ls collected/freereac-release-"$EVR".fc"$rel".noarch.rpm >/dev/null || { echo "::error::no build for fc$rel"; exit 1; }; done
+          echo "STABLE=freereac-release-$EVR.fc45.noarch.rpm" >> "$GITHUB_ENV"
       - uses: Open-Mixer/.github/.github/actions/publish-rpms@openmixer-v1
         with:
           rpm-dir: collected

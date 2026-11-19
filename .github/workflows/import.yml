@@ -55,7 +55,7 @@ jobs:
 
   place-noarch:
     runs-on: ubuntu-latest
-    container: fedora:44
+    container: fedora:45
     steps:
       - run: dnf install -y --setopt=install_weak_deps=False rpm-build rpm-sign createrepo_c apt-utils gnupg2 pinentry findutils git curl diffutils tar gzip
       - uses: actions/checkout@v4
@@ -66,7 +66,7 @@ jobs:
     needs: [check, place-noarch]
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    container: fedora:44
+    container: fedora:45
     steps:
       - name: Tools
         run: dnf install -y --setopt=install_weak_deps=False rpm-sign createrepo_c apt-utils gnupg2 pinentry findutils git curl diffutils tar gzip
@@ -127,7 +127,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { image: 'fedora:44', kind: rpm }
           - { image: 'fedora:45', kind: rpm }
           - { image: 'debian:trixie', kind: deb }
     runs-on: ubuntu-latest
