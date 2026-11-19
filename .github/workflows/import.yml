@@ -29,6 +29,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: No Fedora 44 reference in the workflows
+        run: |
+          tools/test/workflow-fedora-check.sh --self-test
+          tools/test/workflow-fedora-check.sh .
       - name: The checks of the import tools
         run: |
           set -euo pipefail
