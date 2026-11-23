@@ -4,8 +4,9 @@
 #
 #   import.sh fetch <manifest> <dir>     download each listed file and verify it against the manifest checksum and, for an rpm, its
 #                                        current OpenMixer signature, for a deb its entry in the OpenMixer Packages index
-#   import.sh place <dir> <root> <key>   re-sign the rpm signature headers with <key>, copy the debs as they are, regenerate and sign
-#                                        the rpm repodata and the deb index, serve <key>'s public half, keep the newest 2
+#   import.sh place <dir> <root> <key>   re-sign the rpm signature headers with <key> (binary and source rpms), copy the debs as they
+#                                        are, regenerate and sign the rpm repodata of every tree (SRPMS/ too) and the index of every
+#                                        deb suite, serve <key>'s public half, keep the newest 2
 set -euo pipefail
 BASE=${BASE_URL:-https://www.openmixer.org}
 cmd=${1:?usage: import.sh fetch|place ...}
@@ -92,7 +93,8 @@ place() {
         copy_all "$dir/$d" "$root/$d" deb
     done
     "$(dirname "$(readlink -f "$0")")/prune-newest-two.sh" "$root"
-    for d in $(cd "$root" && find rpm/fedora -mindepth 2 -maxdepth 2 -type d ! -name SRPMS | sort); do
+    # every tree of a release, SRPMS/ included: a source rpm the import placed is served only once its tree's repodata lists it
+    for d in $(cd "$root" && find rpm/fedora -mindepth 2 -maxdepth 2 -type d | sort); do
         createrepo_c --quiet --general-compress-type=gz "$root/$d"
         gpg --batch --yes --pinentry-mode loopback --armor --detach-sign -u "$key" --output "$root/$d/repodata/repomd.xml.asc" "$root/$d/repodata/repomd.xml"
     done

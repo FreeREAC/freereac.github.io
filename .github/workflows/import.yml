@@ -57,6 +57,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: A noarch package lands inside every architecture directory and installs from it
         run: tools/test-place-noarch.sh
+      - name: A source rpm lands in SRPMS/ with signed repodata and the source repository lists it
+        run: tools/test-place-sources.sh
 
   import:
     needs: [check, place-noarch]
