@@ -6,7 +6,8 @@ The package repository of FreeREAC, the free implementation of the Roland REAC a
 | tree | contents |
 | --- | --- |
 | `rpm/fedora/{44,45}/{x86_64,aarch64}/` | the dnf repository (`repodata/` signed) |
-| `deb/debian/trixie/` | the apt repository, signed flat index |
+| `rpm/fedora/{44,45}/SRPMS/` | the source rpms (`freereac-source`, disabled by default) |
+| `deb/debian/{bookworm,trixie}/` | the apt repository, one signed flat index per suite |
 | `rpm/RPM-GPG-KEY-freereac`, `deb/freereac.asc` | the one public signing key |
 | `import/manifest.txt` | the exact files moved in from the OpenMixer channel |
 

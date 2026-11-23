@@ -5,8 +5,8 @@ home of FreeREAC packages: `libreac`, `reac-pw`, `reac-stageboxes` (and their `-
 
 | | |
 | --- | --- |
-| rpm | `rpm/fedora/{44,45}/{x86_64,aarch64}/` as the release matrix publishes, `SRPMS/` beside them |
-| deb | `deb/debian/trixie/<arch>/`, one signed flat index per suite |
+| rpm | `rpm/fedora/{44,45}/{x86_64,aarch64}/` as the release matrix publishes, `SRPMS/` beside them (the `freereac-source` repository, its own signed repodata) |
+| deb | `deb/debian/{bookworm,trixie}/<arch>/`, one signed flat index per suite: the suites libreac's and reac-pw's release matrix builds (reac-stageboxes and `freereac-release` are trixie only) |
 | key | **one** dedicated FreeREAC release key, `FreeREAC Release Signing Key <packages@freereac.org>`, fingerprint `97C92ED0E2D65B603A93D4711A72E09298D9C0F6`, made for this channel and nothing else (no personal key signs here). The workflows read the fingerprint from one place only, the organisation variable `FREEREAC_RELEASE_KEY_FPR` (set to that fingerprint); `tools/check-channel-key.sh` checks on every pull request that the served key files hold exactly that one key, and the key in the secrets `FREEREAC_PACKAGES_SIGNING_KEY` and `FREEREAC_PACKAGES_SIGNING_PASSPHRASE`; public half `rpm/RPM-GPG-KEY-freereac` and `deb/freereac.asc` |
 | retention | the newest 2 versions of each package in each tree; a check fails by name above 2 |
 
@@ -49,7 +49,14 @@ reviewed PR that changes `import/manifest.txt` (exact file names and sha256, new
    are the released bytes; the debs are copied as they are (a deb carries no signature, the signed index vouches for it);
 3. regenerates and signs the rpm repodata of each tree and the deb index, serves the key's public half, keeps the newest 2;
 4. records the tree in one signed commit, then proves a clean `dnf install` (Fedora 44, 45) and `apt-get install` (trixie) from
-   the tree with signature checks on.
+   the tree with signature checks on, and lists every source rpm from `SRPMS/` (Fedora 44, 45) and installs `reac-pw` on bookworm.
+
+A move covers every tree the OpenMixer channel serves a FreeREAC file in: the architecture trees, `SRPMS/`, and every suite
+(`tools/manifest.py generate` reads `--arch x86_64 aarch64 noarch SRPMS --suite bookworm trixie` by default). A file left in the
+OpenMixer channel that this channel does not serve is a gap, and Open-Mixer/.github's `remove-freereac-packages` keeps it there
+(FreeREAC/freereac.github.io#12: 8 source rpms and 14 bookworm debs, moved by the second manifest). The manifest lists the files
+of one move: the next move replaces it, because the files of the last one are served here and the OpenMixer channel's index
+no longer lists them (`tools/manifest.py verify` would refuse every such line).
 
 The key never reaches a session: it is a secret used inside the run. The import also drops any package already in the tree that this key does not vouch for (one signed by a retired key). There is no dispatch trigger.
 
