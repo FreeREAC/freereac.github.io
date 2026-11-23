@@ -17,7 +17,9 @@ s=$w/root/rpm/fedora/44/SRPMS
 gpg --batch -q --verify "$s/repodata/repomd.xml.asc" "$s/repodata/repomd.xml" 2>/dev/null || { echo "FAIL: the SRPMS/ metadata is not signed by the channel key"; exit 1; }
 gpg --armor --export "$K" > "$w/k.asc"; rpmkeys --import "$w/k.asc"
 rpm -K "$s/pkg-src-1-1.fc44.src.rpm" | grep -q 'signatures OK' || { echo "FAIL: the source rpm is not signed by the channel key"; exit 1; }
-got=$(dnf -y -q --disablerepo='*' --repofrompath="t,file://$s" --setopt=t.gpgcheck=1 --setopt=t.repo_gpgcheck=1 --setopt="t.gpgkey=file://$w/k.asc" \
-      repoquery --qf '%{name}-%{version}-%{release}.%{arch}\n' 2>/dev/null)
+# a repository id of its own: test-place-noarch.sh, run before it in the same container, leaves its repository file behind
+got=$(dnf -y -q --disablerepo='*' --repofrompath="place-sources,file://$s" --setopt=place-sources.gpgcheck=1 --setopt=place-sources.repo_gpgcheck=1 \
+      --setopt="place-sources.gpgkey=file://$w/k.asc" repoquery --qf '%{name}-%{version}-%{release}.%{arch}\n' 2>"$w/dnf.err") ||
+    { tail -5 "$w/dnf.err"; echo "FAIL: dnf could not read the source repository"; exit 1; }
 grep -qx 'pkg-src-1-1.fc44.src' <<< "$got" || { echo "FAIL: the source repository does not list pkg-src: '$got'"; exit 1; }
 echo "place-sources: ok"
