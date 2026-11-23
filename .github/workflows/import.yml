@@ -42,6 +42,11 @@ jobs:
           set -euo pipefail
           tools/test-manifest.sh
           python3 tools/manifest.py verify --base https://www.openmixer.org --head import/manifest.txt
+      - name: No source rpm of a retired Fedora release, in the tree or the manifest
+        run: |
+          set -euo pipefail
+          tools/check-retired-sources.sh --self-test
+          tools/check-retired-sources.sh . import/manifest.txt
       - name: The served public key files hold exactly the channel's one key
         env:
           FPR: ${{ vars.FREEREAC_RELEASE_KEY_FPR }}
@@ -148,8 +153,10 @@ jobs:
               'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-freereac' > /etc/yum.repos.d/freereac.repo
             dnf -y install ${{ matrix.install }}
             rpm -q libreac ${{ matrix.install }}
-            # every source rpm in SRPMS/ is listed by the source repository, signatures on
+            # every source rpm in SRPMS/ is listed by the source repository, signatures on; a release with no SRPMS/ tree
+            # (a retired one: tools/check-retired-sources.sh) has no source repository to read
             rel=$(rpm -E %fedora); src=rpm/fedora/$rel/SRPMS
+            if [ ! -d "$src" ]; then echo "fc$rel serves no source repository"; exit 0; fi
             listed=$(dnf -y -q --disablerepo='*' --repofrompath="src,file://$PWD/$src" --setopt=src.gpgcheck=1 --setopt=src.repo_gpgcheck=1 \
               --setopt=src.gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-freereac repoquery --qf '%{name}-%{version}-%{release}.%{arch}.rpm\n')
             for f in "$src"/*.src.rpm; do
