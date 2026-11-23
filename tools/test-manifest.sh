@@ -20,6 +20,10 @@ h = lambda c: c * 64
 repo("44", "x86_64", [("reac-pw", v, "1.fc44", "x86_64", h(str(i))) for i, v in enumerate(["1.0.9", "1.0.10", "1.0.11"], 1)]
      + [("other-thing", "1", "1.fc44", "x86_64", h("f"))])
 repo("44", "noarch", [("reac-pw-devel", "1.0.11", "1.fc44", "noarch", h("a"))])
+repo("44", "SRPMS", [("reac-pw", "1.0.11", "1.fc44", "src", h("9"))])
+os.makedirs(f"{w}/deb/debian/bookworm")
+open(f"{w}/deb/debian/bookworm/Packages", "w").write(
+    "Package: reac-pw\nVersion: 1.0.11\nArchitecture: arm64\nFilename: ./arm64/reac-pw_1.0.11_arm64.deb\nSHA256: " + h("8") + "\n")
 os.makedirs(f"{w}/deb/debian/trixie")
 open(f"{w}/deb/debian/trixie/Packages", "w").write(
     "Package: libreac7\nVersion: 1.11.0\nArchitecture: amd64\nFilename: ./amd64/libreac7_1.11.0_amd64.deb\nSHA256: " + h("b") + "\n\n"
@@ -33,6 +37,12 @@ for want in 'reac-pw-1.0.10-1.fc44.x86_64.rpm' 'reac-pw-1.0.11-1.fc44.x86_64.rpm
 done
 if grep -qE 'reac-pw-1.0.9-|libreac7_1.9.0|other-thing' "$w/manifest"; then echo "FAIL: generate kept a third version or a package that is not FreeREAC's"; exit 1; fi
 "$m" verify --base "$w" "$w/manifest" > /dev/null || { echo "FAIL: a manifest generated from the channel was refused"; exit 1; }
+# the defaults cover every tree a FreeREAC file is served in: the source rpms (SRPMS) and the bookworm suite too
+"$m" generate --base "$w" --fedora 44 > "$w/all"
+for want in 'rpm/fedora/44/SRPMS reac-pw-1.0.11-1.fc44.src.rpm' 'deb/debian/bookworm/arm64 reac-pw_1.0.11_arm64.deb' 'deb/debian/trixie/amd64 libreac7_1.11.0_amd64.deb'; do
+    grep -q " $want " "$w/all" || { echo "FAIL: generate with the defaults dropped $want"; exit 1; }
+done
+"$m" verify --base "$w" "$w/all" > /dev/null || { echo "FAIL: a default manifest generated from the channel was refused"; exit 1; }
 # the stale line: the noarch rpm listed under the x86_64 tree, where the index does not list it
 sed 's|rpm/fedora/44/noarch|rpm/fedora/44/x86_64|' "$w/manifest" > "$w/stale"
 if out=$("$m" verify --base "$w" "$w/stale" 2>&1); then echo "FAIL: a stale manifest line was accepted"; exit 1; fi
