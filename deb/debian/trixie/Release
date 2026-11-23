@@ -1,19 +1,19 @@
-Date: Mon, 23 Nov 2026 19:37:36 +0000
+Date: Mon, 23 Nov 2026 20:02:44 +0000
 Label: FreeREAC
 Origin: FreeREAC
 MD5Sum:
  ac5dab490842452d909dd34acb67c8a7            23513 Packages
- 476a8486c71513bbbc1fa2cfc5e6aef3             6334 Packages.gz
- 8b88fa0d5fb4729887b41ea97e207330               71 Release
+ d766dfbb90c838f495647fc85f10e285             6334 Packages.gz
+ c9eda4967190225605c5db2cf124ba75               71 Release
 SHA1:
  3859848aaa3da11042ae4829f9c104e727716f76            23513 Packages
- bf6be1b0b8a763626d318e8b6f2f7cebb85828fc             6334 Packages.gz
- 04a06144fea4e5c3c236a67935944e9f7851106d               71 Release
+ 4233811bd39688c4b8019a8bc2dcabd71a7c8e4f             6334 Packages.gz
+ 14adce599e8c44f0f20189ac1033adec47535213               71 Release
 SHA256:
  a76e5e59f5d4f0f6ed4ad3c0b92843473472f7e19ea3a2daaf8edd3e1eec06ad            23513 Packages
- 440fd97d7eeaf1faa2796644465e23313ff355a62c4be56ac41ca3435090be4f             6334 Packages.gz
- 809e81ebf1582dbab9b9d3d05ed79d2bdefebaf26b49fae7dff517a6663e61de               71 Release
+ 19ec022f8141dd1d57964f79f12b980f0f5937a2a56fda499a45a99b5e443e0b             6334 Packages.gz
+ 991adc4d6dfeebf7d8ef9328fc98fa0bc16009f180de135a3d2f9071508ea978               71 Release
 SHA512:
  302a6e4deeddec3756dbff186ff01d547ac5f03de8b3e21caab6929c19146e63c0461b0d6cfb5ff69939dac109ff6155ee1f54b8db22df67277db2a5d0d17d4f            23513 Packages
- ae13fe283ddcec353ed7b2b9aab3a7737df3e340cb8c821668852ef525ce025eebea040b20aee0f1b0b2dda5717af88112a3e748d7a21dfc1fd73312a1a569b4             6334 Packages.gz
- b07f4a16a34d0aca2f5087e0493b8ce36183478acd746f74a959c2a353ef5cff6129526f404b5759140cbf43034dc3e9b3c462923727867af7dcbf1018daa306               71 Release
+ b84fe15cb0b1f975bbfda7ea44a8d1ae84b5108ebe752597d371b02991a9e36a24faf3dd9946f02273035d276a3f6af43764bd03d70d4078c096a0bce62e2044             6334 Packages.gz
+ 4d073f75772dc0d42e6b58d9e0485ff123bb1523abb20dabaf4346d339f40ccd22d21aa1f1d9849b36ff7d4a400de9d762f92cafb11419bbbf2f6466cd439d57               71 Release
