@@ -4,7 +4,8 @@ name: channel import
 # Merging a reviewed PR that changes import/manifest.txt (exact files, checksummed) runs this once: it downloads them, verifies
 # each, re-signs the rpm signature headers with FreeREAC's one key, copies the debs as they are, regenerates and signs the rpm
 # repodata and the deb index, keeps the newest 2 versions of each package, records the tree and proves a clean dnf and apt
-# install from it. There is no dispatch trigger: a publish is a merge of a reviewed manifest (docs/design.md).
+# install from it (Fedora 44, 45, Debian bookworm, trixie) and that the source repository lists every SRPM. There is no dispatch
+# trigger: a publish is a merge of a reviewed manifest (docs/design.md).
 #
 # Secrets (names only): FREEREAC_PACKAGES_SIGNING_KEY and FREEREAC_PACKAGES_SIGNING_PASSPHRASE sign the packages and the metadata (the
 # dedicated FreeREAC release key, never a personal one); OPENMIXER_CI_SIGNING_KEY signs the channel commit and FREEREAC_PAGES_TOKEN pushes it. The variable
@@ -125,9 +126,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { image: 'fedora:44', kind: rpm }
-          - { image: 'fedora:45', kind: rpm }
-          - { image: 'debian:trixie', kind: deb }
+          - { image: 'fedora:44', kind: rpm, install: 'reac-pw reac-stageboxes' }
+          - { image: 'fedora:45', kind: rpm, install: 'reac-pw reac-stageboxes' }
+          - { image: 'debian:bookworm', kind: deb, suite: bookworm, install: 'reac-pw' }
+          - { image: 'debian:trixie', kind: deb, suite: trixie, install: 'reac-pw reac-stageboxes' }
     runs-on: ubuntu-latest
     container: ${{ matrix.image }}
     steps:
@@ -144,13 +146,23 @@ jobs:
             cp rpm/RPM-GPG-KEY-freereac /etc/pki/rpm-gpg/
             printf '%s\n' '[freereac]' 'name=freereac' "baseurl=file://$PWD/rpm/fedora/\$releasever/\$basearch/" gpgcheck=1 repo_gpgcheck=1 \
               'gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-freereac' > /etc/yum.repos.d/freereac.repo
-            dnf -y install reac-pw reac-stageboxes
-            rpm -q libreac reac-pw reac-stageboxes
+            dnf -y install ${{ matrix.install }}
+            rpm -q libreac ${{ matrix.install }}
+            # every source rpm in SRPMS/ is listed by the source repository, signatures on
+            rel=$(rpm -E %fedora); src=rpm/fedora/$rel/SRPMS
+            listed=$(dnf -y -q --disablerepo='*' --repofrompath="src,file://$PWD/$src" --setopt=src.gpgcheck=1 --setopt=src.repo_gpgcheck=1 \
+              --setopt=src.gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-freereac repoquery --qf '%{name}-%{version}-%{release}.%{arch}.rpm\n')
+            for f in "$src"/*.src.rpm; do
+              [ -e "$f" ] || continue
+              grep -qx "$(basename "$f")" <<< "$listed" || { echo "::error::$f is in the tree but the source repository does not list it"; exit 1; }
+              rpm -K "$f" | grep -q 'signatures OK' || { echo "::error::$f is not signed by the channel key"; exit 1; }
+              echo "served $f"
+            done
           else
             apt-get install -y -qq --no-install-recommends gnupg
             cp deb/freereac.asc /usr/share/keyrings/freereac.asc
-            echo "deb [signed-by=/usr/share/keyrings/freereac.asc] file://$PWD/deb/debian/trixie ./" > /etc/apt/sources.list.d/freereac.list
+            echo "deb [signed-by=/usr/share/keyrings/freereac.asc] file://$PWD/deb/debian/${{ matrix.suite }} ./" > /etc/apt/sources.list.d/freereac.list
             apt-get update -qq
-            apt-get install -y -qq --no-install-recommends reac-pw reac-stageboxes
-            dpkg -s libreac7 reac-pw reac-stageboxes | grep -c '^Status: install ok installed'
+            apt-get install -y -qq --no-install-recommends ${{ matrix.install }}
+            dpkg -s libreac7 ${{ matrix.install }} | grep -c '^Status: install ok installed'
           fi
