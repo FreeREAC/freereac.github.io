@@ -1,18 +1,19 @@
-Architectures: all amd64 arm64
-Codename: trixie
-Date: Wed, 18 Nov 2026 22:34:17 +0000
+Date: Mon, 23 Nov 2026 19:37:36 +0000
 Label: FreeREAC
 Origin: FreeREAC
-Suite: trixie
 MD5Sum:
  ac5dab490842452d909dd34acb67c8a7            23513 Packages
- 7100c5948930c3ee8ae9d8fe3f6ebfce             6325 Packages.gz
+ 476a8486c71513bbbc1fa2cfc5e6aef3             6334 Packages.gz
+ 8b88fa0d5fb4729887b41ea97e207330               71 Release
 SHA1:
  3859848aaa3da11042ae4829f9c104e727716f76            23513 Packages
- 9f65627e44eea9184a2f8d50592f733dbb15cf71             6325 Packages.gz
+ bf6be1b0b8a763626d318e8b6f2f7cebb85828fc             6334 Packages.gz
+ 04a06144fea4e5c3c236a67935944e9f7851106d               71 Release
 SHA256:
  a76e5e59f5d4f0f6ed4ad3c0b92843473472f7e19ea3a2daaf8edd3e1eec06ad            23513 Packages
- 9481e6e1d6b47a2590f410f581f684cc5d2c1a78cb45f985f9e37e86d836c15d             6325 Packages.gz
+ 440fd97d7eeaf1faa2796644465e23313ff355a62c4be56ac41ca3435090be4f             6334 Packages.gz
+ 809e81ebf1582dbab9b9d3d05ed79d2bdefebaf26b49fae7dff517a6663e61de               71 Release
 SHA512:
  302a6e4deeddec3756dbff186ff01d547ac5f03de8b3e21caab6929c19146e63c0461b0d6cfb5ff69939dac109ff6155ee1f54b8db22df67277db2a5d0d17d4f            23513 Packages
- 196e4d294ef9f2bbfbacbd8f143933ec9cada79f5be46b718bf8e8ff515fdf4d70cb5a1a0e5d9925ecc816ffb9f60c0d610205197fbeec9cc5fb10194fec3d3a             6325 Packages.gz
+ ae13fe283ddcec353ed7b2b9aab3a7737df3e340cb8c821668852ef525ce025eebea040b20aee0f1b0b2dda5717af88112a3e748d7a21dfc1fd73312a1a569b4             6334 Packages.gz
+ b07f4a16a34d0aca2f5087e0493b8ce36183478acd746f74a959c2a353ef5cff6129526f404b5759140cbf43034dc3e9b3c462923727867af7dcbf1018daa306               71 Release
