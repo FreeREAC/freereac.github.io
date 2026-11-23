@@ -49,12 +49,15 @@ reviewed PR that changes `import/manifest.txt` (exact file names and sha256, new
    are the released bytes; the debs are copied as they are (a deb carries no signature, the signed index vouches for it);
 3. regenerates and signs the rpm repodata of each tree and the deb index, serves the key's public half, keeps the newest 2;
 4. records the tree in one signed commit, then proves a clean `dnf install` (Fedora 44, 45) and `apt-get install` (trixie) from
-   the tree with signature checks on, and lists every source rpm from `SRPMS/` (Fedora 44, 45) and installs `reac-pw` on bookworm.
+   the tree with signature checks on, and lists every source rpm from the release's `SRPMS/`, when it has one and installs `reac-pw` on bookworm.
 
 A move covers every tree the OpenMixer channel serves a FreeREAC file in: the architecture trees, `SRPMS/`, and every suite
 (`tools/manifest.py generate` reads `--arch x86_64 aarch64 noarch SRPMS --suite bookworm trixie` by default). A file left in the
 OpenMixer channel that this channel does not serve is a gap, and Open-Mixer/.github's `remove-freereac-packages` keeps it there
-(FreeREAC/freereac.github.io#12: 8 source rpms and 14 bookworm debs, moved by the second manifest). The manifest lists the files
+(FreeREAC/freereac.github.io#12: 8 source rpms and 14 bookworm debs, moved by the second manifest). No source rpm of a retired
+Fedora release is served: Fedora 44 is dropped (owner rulings 2026-11-19 and 2026-11-23), so `rpm/fedora/44/SRPMS/` was
+removed whole (#14), `tools/check-retired-sources.sh` refuses one in the tree or the manifest, and `tools/manifest.py generate`
+reads `--fedora 45` by default. The fc44 binaries are not covered by that rule. The manifest lists the files
 of one move: the next move replaces it, because the files of the last one are served here and the OpenMixer channel's index
 no longer lists them (`tools/manifest.py verify` would refuse every such line).
 
