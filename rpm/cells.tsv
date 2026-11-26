@@ -1,10 +1,15 @@
 # package	version	set	cells
 freereac-release	1	-	fc44/noarch fc45/noarch
 libreac	1.11.0	-	fc44/aarch64 fc44/x86_64 fc45/aarch64 fc45/x86_64
+libreac	1.12.1	quick	fc45/x86_64
 libreac-devel	1.11.0	-	fc44/aarch64 fc44/x86_64 fc45/aarch64 fc45/x86_64
+libreac-devel	1.12.1	quick	fc45/x86_64
 libreac-tests	1.11.0	-	fc44/aarch64 fc44/x86_64 fc45/aarch64 fc45/x86_64
+libreac-tests	1.12.1	quick	fc45/x86_64
 libreac-transport	1.11.0	-	fc44/aarch64 fc44/x86_64 fc45/aarch64 fc45/x86_64
+libreac-transport	1.12.1	quick	fc45/x86_64
 libreac-transport-devel	1.11.0	-	fc44/aarch64 fc44/x86_64 fc45/aarch64 fc45/x86_64
+libreac-transport-devel	1.12.1	quick	fc45/x86_64
 reac-pw	1.0.43	-	fc44/aarch64 fc44/x86_64 fc45/aarch64 fc45/x86_64
 reac-pw	1.0.44	-	fc44/x86_64 fc45/x86_64
 reac-pw-devel	1.0.44	-	fc44/aarch64 fc44/x86_64 fc45/aarch64 fc45/x86_64
