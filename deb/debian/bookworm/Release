@@ -1,19 +1,19 @@
-Date: Mon, 23 Nov 2026 20:02:44 +0000
+Architectures: amd64 arm64
+Changelogs: https://freereac.github.io/deb/changelogs/@CHANGEPATH@_changelog
+Codename: bookworm
+Date: Thu, 26 Nov 2026 11:15:25 +0000
 Label: FreeREAC
 Origin: FreeREAC
+Suite: bookworm
 MD5Sum:
  e6164d1f830bc00933eb11e194428029            15423 Packages
- 5c915924135a29b8d5505ff605e8c398             4410 Packages.gz
- c9eda4967190225605c5db2cf124ba75               71 Release
+ a277b50c12d7bc18f12adbc6e967ee7b             4401 Packages.gz
 SHA1:
  d34cc4d9270e41d79527c4072109970066a3b3d7            15423 Packages
- 2a5646f0163a533c5f8a382098a4d060ffbbdb78             4410 Packages.gz
- 14adce599e8c44f0f20189ac1033adec47535213               71 Release
+ ca473ec7feaacaa049cc0599dad6a0e84c6a2b87             4401 Packages.gz
 SHA256:
  1a63bf4162a5b314a9a9e5fc985c7f31700c8cf9d2c8e460ed3616cbfa906da0            15423 Packages
- a07ff47b665f7c83093e43ca1dee94320593a58e1058e78ebd12108b842840d5             4410 Packages.gz
- 991adc4d6dfeebf7d8ef9328fc98fa0bc16009f180de135a3d2f9071508ea978               71 Release
+ a8cc3daa23b0a30dc2025564275ff665e5e2857ab55e917050743c3149958770             4401 Packages.gz
 SHA512:
  d0f03aa6beb7904b209b00e5b74adf523894f13349e946603fd42b16d1bc1417fd86812fc63511c4bffaa3d95d0dc5811bff2f4c7b34288805eb5a633894e6bc            15423 Packages
- cd0c932d7f7d11318303ef1984aa845a26f3e6b475c69b8451b68f227721ad2c984ae54788e7113f327c9e84908a879228c427aa467a839196d1c46835da86a2             4410 Packages.gz
- 4d073f75772dc0d42e6b58d9e0485ff123bb1523abb20dabaf4346d339f40ccd22d21aa1f1d9849b36ff7d4a400de9d762f92cafb11419bbbf2f6466cd439d57               71 Release
+ cc2695cfee8f6fd3adfceb4d528cb2f0b1d45c2080fbe90f2fa8680a16c8949967f9b9ab4625cd028a48cb7b8023ef77694c521065d7d92a0721970110a9c2cb             4401 Packages.gz

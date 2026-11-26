@@ -1,38 +1,38 @@
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
 
-Date: Mon, 23 Nov 2026 20:02:44 +0000
+Architectures: amd64 arm64
+Changelogs: https://freereac.github.io/deb/changelogs/@CHANGEPATH@_changelog
+Codename: bookworm
+Date: Thu, 26 Nov 2026 11:15:25 +0000
 Label: FreeREAC
 Origin: FreeREAC
+Suite: bookworm
 MD5Sum:
  e6164d1f830bc00933eb11e194428029            15423 Packages
- 5c915924135a29b8d5505ff605e8c398             4410 Packages.gz
- c9eda4967190225605c5db2cf124ba75               71 Release
+ a277b50c12d7bc18f12adbc6e967ee7b             4401 Packages.gz
 SHA1:
  d34cc4d9270e41d79527c4072109970066a3b3d7            15423 Packages
- 2a5646f0163a533c5f8a382098a4d060ffbbdb78             4410 Packages.gz
- 14adce599e8c44f0f20189ac1033adec47535213               71 Release
+ ca473ec7feaacaa049cc0599dad6a0e84c6a2b87             4401 Packages.gz
 SHA256:
  1a63bf4162a5b314a9a9e5fc985c7f31700c8cf9d2c8e460ed3616cbfa906da0            15423 Packages
- a07ff47b665f7c83093e43ca1dee94320593a58e1058e78ebd12108b842840d5             4410 Packages.gz
- 991adc4d6dfeebf7d8ef9328fc98fa0bc16009f180de135a3d2f9071508ea978               71 Release
+ a8cc3daa23b0a30dc2025564275ff665e5e2857ab55e917050743c3149958770             4401 Packages.gz
 SHA512:
  d0f03aa6beb7904b209b00e5b74adf523894f13349e946603fd42b16d1bc1417fd86812fc63511c4bffaa3d95d0dc5811bff2f4c7b34288805eb5a633894e6bc            15423 Packages
- cd0c932d7f7d11318303ef1984aa845a26f3e6b475c69b8451b68f227721ad2c984ae54788e7113f327c9e84908a879228c427aa467a839196d1c46835da86a2             4410 Packages.gz
- 4d073f75772dc0d42e6b58d9e0485ff123bb1523abb20dabaf4346d339f40ccd22d21aa1f1d9849b36ff7d4a400de9d762f92cafb11419bbbf2f6466cd439d57               71 Release
+ cc2695cfee8f6fd3adfceb4d528cb2f0b1d45c2080fbe90f2fa8680a16c8949967f9b9ab4625cd028a48cb7b8023ef77694c521065d7d92a0721970110a9c2cb             4401 Packages.gz
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEl8ku0OLWW2A6k9RxGnLgkpjZwPYFAmsEm+QACgkQGnLgkpjZ
-wPYvDw/+KSKRR6THIvGkQFIli4bbTgI+RAt2/vCwshrTmuKPbvGNbsnxTgGo3WeO
-hRJNezsOHr4ba3aROazOB4fldYnFTJr/y+Q5KSFO4FCPnQ3QviRK88/oSzOdXQZ1
-rYqIUoy5zTY24bWRkBykmllBGv2Ek1tij6BFqpDHnhAggppkbx3ZX+iNkWCcWT4Z
-vmwWGj1oK2SFsALvhDuu3Hz1nv9gl1noTO52n77HD1AXuy3wY1+xdXsLnctPCbQg
-nr06NKDMGeMnIKDNfP2en9+zyfOcwRoxNlsPvS0eobwHUq8cN5S8wFPs9Bpgnk/s
-XJ0t2v5omBsUmOzEeNcOjxd62rNiX6enZnNN0DYd0Utiof4s1H7XpRAe2a86XC1d
-HwxCSrWjbteXlqDZYtigB/UBwv+6rCZ2iQs69OIuwhB0XOzlAmtP8tGuLUBoN+8P
-OBLi/hSnpIWBcU3PpMzJ4+0u/oYlZzDepF0SBi7WHao8Zt0Hae2lfXr6OpqXv7SH
-YcljVvVTDiqy1qWFUuEoVno/tMmZtePehrarwp/YenFu1cuMRYYHDQtFYGxshppH
-N+NwwfPi96HCW1jfgbYQBVaPdFTnfclhmVAa5DZFx6uOhzrB57ZjGllsSOF97rtQ
-8AC0zfPsX3kGHj7OryNdcUAORnpuZZWE+Gqefso+1pUB5IRB5oE=
-=k+OK
+iQIzBAEBCgAdFiEEl8ku0OLWW2A6k9RxGnLgkpjZwPYFAmsIFM4ACgkQGnLgkpjZ
+wPYDDA//ViSxh1oKjbNrhIE5TlxpJdu1yaCB70Pvz8xQ7DM2m8qGSnRFno/WP1Uw
+/esSCnXpGgi74WsVTy+A2Z/m/0nMV0e/xjg/5HYc/ADUuBJEZ1ysNa99fGXUXbL0
+3S6+bBjeXgyU7AMhFqFGFAmdrhOZablXKGxANGy5mXvC4GY6b6zjX+ioZZes4hct
+0iLB+u7XPf1+zVyGrVazRqWmFqLlsM4biBLpt3VHrf0t/gRV7I8kB0dO+FdxCQkG
+tEkf4RyHyKKIfgHTABFx5VWG4HHDCawfPWBAWq7vz8JpXlPUSzUtESWVLI0eKrSn
+il6vENSzsQvt1cbIbskSZtebZzznMaf4IujaR5ax3YusnXlZjk+9DnrW0jpwwTUJ
+dW+zUhcqQfJ+uow3BKutp69ng85EzwwY0ZD/nFKy8J1LGDR0r++S6YJ0sLPzwtiF
+8tREJpqCoehZ/uXSEAwAVkD6P1ztN6Z31j5TdVTBbQSA2X0clXVJMNCuZYfc07oy
+VIVWQh6zOxKufAXmDp/PYPlAmOx4KO0YGFD8KrFP611JZnnjae3rXlVcKOo6A1eL
+qHFTDRGd/F87yvYk8Nye5Jax7D2LbJinxLVkpMh5WPIp+FXunjsCrONAPYU68qXk
+00TcL3m+WuTYTWRbjXrHNr42tglYOZPDGisQSsI0NR5mXAmUSM4=
+=B0wg
 -----END PGP SIGNATURE-----

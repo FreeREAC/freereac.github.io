@@ -1,19 +1,19 @@
-Date: Mon, 23 Nov 2026 20:02:44 +0000
+Architectures: all amd64 arm64
+Changelogs: https://freereac.github.io/deb/changelogs/@CHANGEPATH@_changelog
+Codename: trixie
+Date: Thu, 26 Nov 2026 11:15:26 +0000
 Label: FreeREAC
 Origin: FreeREAC
+Suite: trixie
 MD5Sum:
- ac5dab490842452d909dd34acb67c8a7            23513 Packages
- d766dfbb90c838f495647fc85f10e285             6334 Packages.gz
- c9eda4967190225605c5db2cf124ba75               71 Release
+ 31f32fd9507694ab1d7de5f9725ec93d            28461 Packages
+ 6abeb093d637f0b04221a1c8a06a52ed             7314 Packages.gz
 SHA1:
- 3859848aaa3da11042ae4829f9c104e727716f76            23513 Packages
- 4233811bd39688c4b8019a8bc2dcabd71a7c8e4f             6334 Packages.gz
- 14adce599e8c44f0f20189ac1033adec47535213               71 Release
+ a89ead8cba8ce203ac47c4b991eefaec1e0f20f8            28461 Packages
+ 5dbb76f7c5d50efa13b18f3e2504412aa46ff4df             7314 Packages.gz
 SHA256:
- a76e5e59f5d4f0f6ed4ad3c0b92843473472f7e19ea3a2daaf8edd3e1eec06ad            23513 Packages
- 19ec022f8141dd1d57964f79f12b980f0f5937a2a56fda499a45a99b5e443e0b             6334 Packages.gz
- 991adc4d6dfeebf7d8ef9328fc98fa0bc16009f180de135a3d2f9071508ea978               71 Release
+ c89c3f5364bcd9f1cc78336bfb14b50f1fa7d24cae403ade0b51a189939d3d2b            28461 Packages
+ e908fcd70732d9da17bba5bb339b6b68246673eed4f994f5eade1f7f15dbf6c6             7314 Packages.gz
 SHA512:
- 302a6e4deeddec3756dbff186ff01d547ac5f03de8b3e21caab6929c19146e63c0461b0d6cfb5ff69939dac109ff6155ee1f54b8db22df67277db2a5d0d17d4f            23513 Packages
- b84fe15cb0b1f975bbfda7ea44a8d1ae84b5108ebe752597d371b02991a9e36a24faf3dd9946f02273035d276a3f6af43764bd03d70d4078c096a0bce62e2044             6334 Packages.gz
- 4d073f75772dc0d42e6b58d9e0485ff123bb1523abb20dabaf4346d339f40ccd22d21aa1f1d9849b36ff7d4a400de9d762f92cafb11419bbbf2f6466cd439d57               71 Release
+ e405007b8e8666787f036ba700153244533edeb81c8940e533078ab978491e9a8091159bf1eda85a3d6877efd46a5a386339917182012f7dca6eff3c810daf87            28461 Packages
+ 937ceb11c9e206e3ee7deedf71f49e62178bce25b7cfae0e63e2317da43244fc1541fe952f67b882e7a66ccf6e2d5b13124f5e6a0c00ce5a9299be37b8833fed             7314 Packages.gz

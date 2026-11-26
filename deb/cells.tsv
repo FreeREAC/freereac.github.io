@@ -1,12 +1,17 @@
 # package	version	set	cells
 freereac-release	1	-	trixie/all
-libreac-dev	1.11.0	-	trixie/amd64 trixie/arm64
-libreac-tests	1.11.0	-	trixie/amd64 trixie/arm64
-libreac-transport-dev	1.11.0	-	trixie/amd64 trixie/arm64
-libreac-transport7	1.11.0	-	trixie/amd64 trixie/arm64
-libreac6	1.10.0	-	trixie/amd64 trixie/arm64
-libreac7	1.11.0	-	trixie/amd64 trixie/arm64
-reac-pw	1.0.43	-	trixie/amd64 trixie/arm64
+libreac-dev	1.11.0	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
+libreac-dev	1.12.1	quick	trixie/arm64
+libreac-tests	1.11.0	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
+libreac-tests	1.12.1	quick	trixie/arm64
+libreac-transport-dev	1.11.0	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
+libreac-transport-dev	1.12.1	quick	trixie/arm64
+libreac-transport1.12.1	1.12.1	quick	trixie/arm64
+libreac-transport7	1.11.0	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
+libreac1.12.1	1.12.1	quick	trixie/arm64
+libreac6	1.10.0	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
+libreac7	1.11.0	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
+reac-pw	1.0.43	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
 reac-pw	1.0.44	-	trixie/amd64 trixie/arm64
 reac-pw-dev	1.0.44	-	trixie/all
 reac-stageboxes	0.1.0	-	trixie/amd64 trixie/arm64
