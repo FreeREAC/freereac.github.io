@@ -1,7 +1,7 @@
 Architectures: amd64 arm64
 Changelogs: https://freereac.github.io/deb/changelogs/@CHANGEPATH@_changelog
 Codename: bookworm
-Date: Thu, 26 Nov 2026 11:15:25 +0000
+Date: Fri, 27 Nov 2026 08:25:16 +0000
 Label: FreeREAC
 Origin: FreeREAC
 Suite: bookworm

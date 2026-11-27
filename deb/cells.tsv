@@ -2,13 +2,18 @@
 freereac-release	1	-	trixie/all
 libreac-dev	1.11.0	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
 libreac-dev	1.12.1	quick	trixie/arm64
+libreac-dev	1.12.2	full	trixie/amd64 trixie/arm64
 libreac-tests	1.11.0	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
 libreac-tests	1.12.1	quick	trixie/arm64
+libreac-tests	1.12.2	full	trixie/amd64 trixie/arm64
 libreac-transport-dev	1.11.0	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
 libreac-transport-dev	1.12.1	quick	trixie/arm64
+libreac-transport-dev	1.12.2	full	trixie/amd64 trixie/arm64
 libreac-transport1.12.1	1.12.1	quick	trixie/arm64
+libreac-transport1.12.2	1.12.2	full	trixie/amd64 trixie/arm64
 libreac-transport7	1.11.0	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
 libreac1.12.1	1.12.1	quick	trixie/arm64
+libreac1.12.2	1.12.2	full	trixie/amd64 trixie/arm64
 libreac6	1.10.0	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
 libreac7	1.11.0	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64
 reac-pw	1.0.43	-	bookworm/amd64 bookworm/arm64 trixie/amd64 trixie/arm64

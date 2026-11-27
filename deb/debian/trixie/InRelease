@@ -4,35 +4,35 @@ Hash: SHA512
 Architectures: all amd64 arm64
 Changelogs: https://freereac.github.io/deb/changelogs/@CHANGEPATH@_changelog
 Codename: trixie
-Date: Thu, 26 Nov 2026 11:15:26 +0000
+Date: Fri, 27 Nov 2026 08:25:17 +0000
 Label: FreeREAC
 Origin: FreeREAC
 Suite: trixie
 MD5Sum:
- 31f32fd9507694ab1d7de5f9725ec93d            28461 Packages
- 6abeb093d637f0b04221a1c8a06a52ed             7314 Packages.gz
+ 3d2625f048d71509cb66a498af9c22bf            38356 Packages
+ 3defb7aa36b3b358ed5f8edd3ff114e6             9348 Packages.gz
 SHA1:
- a89ead8cba8ce203ac47c4b991eefaec1e0f20f8            28461 Packages
- 5dbb76f7c5d50efa13b18f3e2504412aa46ff4df             7314 Packages.gz
+ 88473ac24ba3e6b57886ca8455e9fa2ee0fa423d            38356 Packages
+ 2f74e76aac422d59c7b619278fb3c8a85fe08a52             9348 Packages.gz
 SHA256:
- c89c3f5364bcd9f1cc78336bfb14b50f1fa7d24cae403ade0b51a189939d3d2b            28461 Packages
- e908fcd70732d9da17bba5bb339b6b68246673eed4f994f5eade1f7f15dbf6c6             7314 Packages.gz
+ ec728576b27878f3308f541dab79d5fd3c602b645c2ad99c04237cec5e83b578            38356 Packages
+ 0bca7c7f5f33113788d81a683716af1dbeb938c610335caf0d18c1e3039a7123             9348 Packages.gz
 SHA512:
- e405007b8e8666787f036ba700153244533edeb81c8940e533078ab978491e9a8091159bf1eda85a3d6877efd46a5a386339917182012f7dca6eff3c810daf87            28461 Packages
- 937ceb11c9e206e3ee7deedf71f49e62178bce25b7cfae0e63e2317da43244fc1541fe952f67b882e7a66ccf6e2d5b13124f5e6a0c00ce5a9299be37b8833fed             7314 Packages.gz
+ 3edfa7bba27fb5a075a742aecedeb0a908821ca7470ea3042b6b2dc51f03f85db013a309bbb720874d7e48ff8cd450bdb4944e70ece5becd5c374b4e59c7c63d            38356 Packages
+ ac7aaa4b65b9eea66f1c34928500b4107862c9615ee09b97813e406030de10eb200d8d0c48593c9f59daf99938216a2a4cacbd1c77365045f1ccc6ca14857044             9348 Packages.gz
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEl8ku0OLWW2A6k9RxGnLgkpjZwPYFAmsIFM4ACgkQGnLgkpjZ
-wPbpxw//Tbac64JEZI2Zkty79w6t5rMrAZuodOW8IXsnr6mP5AvoPeL9A0jtTrrK
-hRq7IpGRJ0DSX/Df1UeQr08GiRoQ0ktmLQR03M+SbjO2ZvaBEIP8jhEKpIqZ8cRX
-njw7T++ifE0vl1PTtI4WNk1i/bviG/OEWG3NlIfcGeU5x0Ryye/3wQ31JldjV4du
-0uh0KRIs3kh7J/5qwHAvNmJuwkU0ntGzlo0D8GJ50G8X/5axABJ3uXpYB1iA8mBH
-3OxuTusUipbPFn9xtzycOAkuedxab5h/zIBuVJTKYV4noG8Q+W+867xVpsbdDndO
-/AdSQINY3e92eI8+lQHU5vrsvCw+uUABDNnMQTD/tSqMmey3kDxJZZUhmrvZ8Ws8
-CbeZ4xzAsV9JACBcgN03r45jgACADkd9QQoBeRbAR1HAZoixRLSIbYyAmTmLJLE0
-GL6Xj3/exCb/QP8kfiZ4Mu/cOvqhTsUHiM8fe1evcAL1F9low71JNhMfiTXH4isW
-7m6a00SRmLxJxTg4eOgddMWehcvk29d+Tw14WkAh/BWuD2AZLETvJ/XuJz7qBeq/
-KD0/hxJ8+oEVCHDGa6DmUVWCqO/na77YcVekKVqjxTWSS7FhlzGJAieObonFuZM/
-zE6MrRJPpi5TKF7RhYeXy3iNbwdzgkSCg/M/5PL3QEpLQpBgjyU=
-=4AgT
+iQIzBAEBCgAdFiEEl8ku0OLWW2A6k9RxGnLgkpjZwPYFAmsJPm0ACgkQGnLgkpjZ
+wPbbSQ//aLDd9UKRqYn2LNLjrYAem2ImmRe2koyV766LZQ3HEer6xK5t2LmOuQYe
+nFrDVira1AynxavKd+Ii4kT2VXzN5WZghZDF2Sj/rKqwyu43xH5QC2X7VZfWT85L
+fOXXCCfIvXs1lrwynVpLWzIaBUuvYM/KVxxN7qmvt5X3QVdTTauSmmU3d5dVdzIk
+YsTTgjPR9jG3dOHnzzNpXwIsqKtKo9fl0Vf+YGer5z42/uCqk14r/ExZyAj52cyC
+63sRh1eF/JiekIZKLxfTCqh9gffUlL4yYphyundsLKBdUAvqZsNIu6bSrspiiTWJ
+shfawIr0zeQbUWZA0VFO0e1yaBluB/0hW8TopneRy2HspSD3VmyRT0S5pBAJr6p4
+WiOzoCac6yKQPWlxfhV+3LtsRpRb/rYOdl0F2mCuedLak0H44rSgvdyINAGgDVH8
+uVakqoUWvAM8URCt5ouWreJcK0XcNLCF4ieC+XDdiFOTG2oJEv59QLlzz73qqpHH
+evztllDJ3RdxspnZNt4O4yAjGCbIr84iBd5ewyXRH3QoL+JBWtFKwOB7jSW2UGNd
+hZmowIPZzQWO6ylS90taYyegk0vR7eWrn5v4tHy8Us1Ebxa+S5ghOKYOLtVRq58/
+h7ZSN8LJaxcRa7vP4XE1z/GoHV5hi2N6o73a0381/5N9U9xKij8=
+=V3kp
 -----END PGP SIGNATURE-----

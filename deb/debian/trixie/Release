@@ -1,19 +1,19 @@
 Architectures: all amd64 arm64
 Changelogs: https://freereac.github.io/deb/changelogs/@CHANGEPATH@_changelog
 Codename: trixie
-Date: Thu, 26 Nov 2026 11:15:26 +0000
+Date: Fri, 27 Nov 2026 08:25:17 +0000
 Label: FreeREAC
 Origin: FreeREAC
 Suite: trixie
 MD5Sum:
- 31f32fd9507694ab1d7de5f9725ec93d            28461 Packages
- 6abeb093d637f0b04221a1c8a06a52ed             7314 Packages.gz
+ 3d2625f048d71509cb66a498af9c22bf            38356 Packages
+ 3defb7aa36b3b358ed5f8edd3ff114e6             9348 Packages.gz
 SHA1:
- a89ead8cba8ce203ac47c4b991eefaec1e0f20f8            28461 Packages
- 5dbb76f7c5d50efa13b18f3e2504412aa46ff4df             7314 Packages.gz
+ 88473ac24ba3e6b57886ca8455e9fa2ee0fa423d            38356 Packages
+ 2f74e76aac422d59c7b619278fb3c8a85fe08a52             9348 Packages.gz
 SHA256:
- c89c3f5364bcd9f1cc78336bfb14b50f1fa7d24cae403ade0b51a189939d3d2b            28461 Packages
- e908fcd70732d9da17bba5bb339b6b68246673eed4f994f5eade1f7f15dbf6c6             7314 Packages.gz
+ ec728576b27878f3308f541dab79d5fd3c602b645c2ad99c04237cec5e83b578            38356 Packages
+ 0bca7c7f5f33113788d81a683716af1dbeb938c610335caf0d18c1e3039a7123             9348 Packages.gz
 SHA512:
- e405007b8e8666787f036ba700153244533edeb81c8940e533078ab978491e9a8091159bf1eda85a3d6877efd46a5a386339917182012f7dca6eff3c810daf87            28461 Packages
- 937ceb11c9e206e3ee7deedf71f49e62178bce25b7cfae0e63e2317da43244fc1541fe952f67b882e7a66ccf6e2d5b13124f5e6a0c00ce5a9299be37b8833fed             7314 Packages.gz
+ 3edfa7bba27fb5a075a742aecedeb0a908821ca7470ea3042b6b2dc51f03f85db013a309bbb720874d7e48ff8cd450bdb4944e70ece5becd5c374b4e59c7c63d            38356 Packages
+ ac7aaa4b65b9eea66f1c34928500b4107862c9615ee09b97813e406030de10eb200d8d0c48593c9f59daf99938216a2a4cacbd1c77365045f1ccc6ca14857044             9348 Packages.gz
